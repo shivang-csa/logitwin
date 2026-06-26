@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LogiTwin AI Engine — Predictive Supply Chain Intelligence</title>
+  <meta name="description" content="LogiTwin AI Engine detects supply chain disruptions in under 2 seconds, scores factory impact, and fires automated mitigation — before your production line stops.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0D1117;
+      --bg2:       #161B22;
+      --bg3:       #21262D;
+      --border:    #30363D;
+      --text:      #E6EDF3;
+      --text2:     #8B949E;
+      --text3:     #6E7681;
+      --purple:    #7C3AED;
+      --purple2:   #9D5CFF;
+      --purple-lt: rgba(124,58,237,.12);
+      --green:     #10B981;
+      --green-lt:  rgba(16,185,129,.12);
+      --red:       #EF4444;
+      --red-lt:    rgba(239,68,68,.12);
+      --orange:    #F97316;
+      --orange-lt: rgba(249,115,22,.12);
+      --yellow:    #EAB308;
+      --blue:      #38BDF8;
+      --font:      'Inter', sans-serif;
+      --mono:      'JetBrains Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Utility ──────────────────────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+    .mono { font-family: var(--mono); }
+    .badge {
+      display: inline-flex; align-items: center; gap: .35rem;
+      padding: .25rem .75rem; border-radius: 20px;
+      font-size: .75rem; font-weight: 600; letter-spacing: .03em;
+    }
+    .badge-purple { background: var(--purple-lt); color: var(--purple2); border: 1px solid rgba(124,58,237,.3); }
+    .badge-green  { background: var(--green-lt);  color: var(--green);   border: 1px solid rgba(16,185,129,.3); }
+    .badge-red    { background: var(--red-lt);    color: var(--red);     border: 1px solid rgba(239,68,68,.3); }
+    .badge-orange { background: var(--orange-lt); color: var(--orange);  border: 1px solid rgba(249,115,22,.3); }
+    .badge-yellow { background: rgba(234,179,8,.12); color: var(--yellow); border: 1px solid rgba(234,179,8,.3); }
+
+    /* ── Animations ───────────────────────────────────────────────────── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+    @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+    @keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+    @keyframes gridMove { from { transform:translateY(0); } to { transform:translateY(40px); } }
+    @keyframes ticker   { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+    @keyframes glow     { 0%,100% { box-shadow:0 0 20px rgba(124,58,237,.3); } 50% { box-shadow:0 0 40px rgba(124,58,237,.6); } }
+    @keyframes countUp  { from { opacity:0; } to { opacity:1; } }
+
+    .fade-up  { opacity:0; animation: fadeUp .7s ease forwards; }
+    .delay-1  { animation-delay: .1s; }
+    .delay-2  { animation-delay: .2s; }
+    .delay-3  { animation-delay: .3s; }
+    .delay-4  { animation-delay: .4s; }
+    .delay-5  { animation-delay: .5s; }
+
+    /* ── NAV ──────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,17,23,.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: 1.1rem; font-weight: 700; color: var(--text);
+    }
+    .nav-logo .icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--purple), #5B21B6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      animation: glow 3s ease infinite;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2rem; }
+    .nav-links a { font-size: .875rem; color: var(--text2); transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--purple); color: white;
+      padding: .5rem 1.25rem; border-radius: 8px;
+      font-size: .875rem; font-weight: 600;
+      transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .85; }
+
+    /* ── HERO ─────────────────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 100px 0 60px;
+      position: relative; overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(124,58,237,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,58,237,.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 8s linear infinite alternate;
+    }
+    .hero-glow {
+      position: absolute; top: 20%; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(124,58,237,.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 780px; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--purple-lt); border: 1px solid rgba(124,58,237,.3);
+      border-radius: 20px; padding: .35rem 1rem;
+      font-size: .78rem; font-weight: 600; color: var(--purple2);
+      margin-bottom: 1.5rem;
+    }
+    .hero-tag .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease infinite;
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900; line-height: 1.1;
+      letter-spacing: -.02em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title .accent { color: var(--purple2); }
+    .hero-title .line2 { color: var(--text2); font-weight: 300; }
+    .hero-sub {
+      font-size: 1.15rem; color: var(--text2);
+      max-width: 600px; margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-sub strong { color: var(--text); }
+    .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--purple); color: white;
+      padding: .875rem 2rem; border-radius: 10px;
+      font-size: 1rem; font-weight: 600;
+      transition: all .2s; border: none; cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--purple2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(124,58,237,.4); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: transparent; color: var(--text);
+      padding: .875rem 2rem; border-radius: 10px;
+      font-size: 1rem; font-weight: 500;
+      border: 1px solid var(--border);
+      transition: all .2s; cursor: pointer;
+    }
+    .btn-secondary:hover { border-color: var(--purple); color: var(--purple2); transform: translateY(-1px); }
+
+    /* ── LIVE TICKER ──────────────────────────────────────────────────── */
+    .ticker-wrap {
+      overflow: hidden; border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2); padding: .6rem 0;
+      margin-top: 3rem; position: relative;
+    }
+    .ticker-wrap::before, .ticker-wrap::after {
+      content:''; position:absolute; top:0; bottom:0; width:80px; z-index:1;
+    }
+    .ticker-wrap::before { left:0; background:linear-gradient(90deg,var(--bg2),transparent); }
+    .ticker-wrap::after  { right:0; background:linear-gradient(-90deg,var(--bg2),transparent); }
+    .ticker {
+      display: flex; gap: 3rem;
+      animation: ticker 30s linear infinite;
+      width: max-content;
+    }
+    .ticker-item {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .78rem; font-family: var(--mono);
+      color: var(--text2); white-space: nowrap;
+    }
+    .ticker-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+    /* ── STATS STRIP ──────────────────────────────────────────────────── */
+    #stats {
+      padding: 5rem 0;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-size: 3rem; font-weight: 900;
+      line-height: 1; margin-bottom: .35rem;
+      background: linear-gradient(135deg, var(--text), var(--purple2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .stat-label { font-size: .8rem; color: var(--text2); text-transform: uppercase; letter-spacing: .08em; }
+
+    /* ── SECTION HEADERS ──────────────────────────────────────────────── */
+    .section-tag {
+      display: inline-block;
+      font-size: .72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .12em;
+      color: var(--purple2); margin-bottom: .75rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800; line-height: 1.2;
+      letter-spacing: -.01em; margin-bottom: 1rem;
+    }
+    .section-sub {
+      font-size: 1.05rem; color: var(--text2);
+      max-width: 600px; line-height: 1.7;
+    }
+    .section-header { margin-bottom: 4rem; }
+    .section-header.center { text-align: center; }
+    .section-header.center .section-sub { margin: 0 auto; }
+
+    /* ── HOW IT WORKS ─────────────────────────────────────────────────── */
+    #how { padding: 6rem 0; }
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0;
+      position: relative;
+    }
+    .pipeline::before {
+      content: '';
+      position: absolute; top: 48px; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--purple), transparent);
+    }
+    .pipeline-step {
+      text-align: center; padding: 2rem 1.5rem;
+      position: relative;
+    }
+    .step-icon {
+      width: 56px; height: 56px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin: 0 auto 1.25rem;
+      position: relative; z-index: 1;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      transition: all .3s;
+    }
+    .pipeline-step:hover .step-icon {
+      border-color: var(--purple);
+      box-shadow: 0 0 24px rgba(124,58,237,.3);
+      transform: translateY(-4px);
+    }
+    .step-num {
+      position: absolute; top: -8px; right: -8px;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--purple); color: white;
+      font-size: .65rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-title { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; }
+    .step-desc  { font-size: .85rem; color: var(--text2); line-height: 1.6; }
+
+    /* ── SCENARIOS ────────────────────────────────────────────────────── */
+    #scenarios { padding: 6rem 0; background: var(--bg2); }
+    .scenarios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+    .scenario-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      transition: all .3s;
+    }
+    .scenario-card:hover {
+      border-color: var(--purple);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,.4);
+    }
+    .scenario-header {
+      padding: 1.5rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .scenario-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
+    }
+    .scenario-title { font-size: 1rem; font-weight: 700; margin-bottom: .25rem; }
+    .scenario-desc  { font-size: .82rem; color: var(--text2); line-height: 1.5; }
+    .scenario-body  { padding: 1.25rem 1.5rem; }
+    .impact-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .5rem 0; border-bottom: 1px solid var(--bg2);
+      font-size: .82rem;
+    }
+    .impact-row:last-child { border-bottom: none; }
+    .impact-factory { color: var(--text); font-weight: 500; }
+    .impact-score   { font-family: var(--mono); font-size: .78rem; }
+    .scenario-footer {
+      padding: 1rem 1.5rem; background: var(--bg2);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sim-time {
+      font-size: .75rem; color: var(--text2);
+      display: flex; align-items: center; gap: .35rem;
+    }
+    .sim-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+
+    /* ── GRAPH VIZ ────────────────────────────────────────────────────── */
+    #graph { padding: 6rem 0; }
+    .graph-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+      align-items: center;
+    }
+    .graph-canvas {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem;
+      aspect-ratio: 1; position: relative; overflow: hidden;
+    }
+    svg.graph-svg { width: 100%; height: 100%; }
+    .graph-text h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; }
+    .graph-text p  { color: var(--text2); margin-bottom: 1.5rem; line-height: 1.7; }
+    .schema-list { list-style: none; display: flex; flex-direction: column; gap: .75rem; }
+    .schema-item {
+      display: flex; align-items: center; gap: .75rem;
+      font-size: .875rem; font-family: var(--mono);
+    }
+    .schema-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── METRICS GRID ─────────────────────────────────────────────────── */
+    #metrics { padding: 6rem 0; background: var(--bg2); }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .metric-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.75rem;
+      transition: all .3s;
+    }
+    .metric-card:hover { border-color: var(--purple); transform: translateY(-2px); }
+    .metric-icon  { font-size: 1.5rem; margin-bottom: 1rem; }
+    .metric-val   { font-size: 2.5rem; font-weight: 900; line-height: 1; margin-bottom: .35rem; }
+    .metric-label { font-size: .8rem; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .75rem; }
+    .metric-desc  { font-size: .85rem; color: var(--text2); line-height: 1.6; }
+
+    /* ── TECH STACK ───────────────────────────────────────────────────── */
+    #tech { padding: 6rem 0; }
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+    .tech-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem;
+      text-align: center; transition: all .3s;
+    }
+    .tech-card:hover { border-color: var(--purple); transform: translateY(-2px); }
+    .tech-icon  { font-size: 1.75rem; margin-bottom: .5rem; }
+    .tech-name  { font-size: .875rem; font-weight: 700; margin-bottom: .2rem; }
+    .tech-role  { font-size: .72rem; color: var(--text2); }
+
+    /* ── USE CASES ────────────────────────────────────────────────────── */
+    #usecases { padding: 6rem 0; background: var(--bg2); }
+    .usecases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .usecase-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.75rem;
+      transition: all .3s;
+    }
+    .usecase-card:hover { border-color: var(--purple); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,.3); }
+    .usecase-icon  { font-size: 2rem; margin-bottom: 1rem; }
+    .usecase-title { font-size: 1.1rem; font-weight: 700; margin-bottom: .5rem; }
+    .usecase-desc  { font-size: .85rem; color: var(--text2); line-height: 1.6; margin-bottom: 1rem; }
+    .usecase-tags  { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .usecase-tag   {
+      font-size: .7rem; font-weight: 600; padding: .2rem .6rem;
+      border-radius: 6px; background: var(--bg2); color: var(--text2);
+      border: 1px solid var(--border);
+    }
+
+    /* ── PROOF OF WORK ────────────────────────────────────────────────── */
+    #proof { padding: 6rem 0; }
+    .proof-terminal {
+      background: #0A0E13; border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,.6);
+    }
+    .terminal-bar {
+      background: var(--bg2); padding: .75rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .tbar-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .tbar-title {
+      margin-left: .5rem; font-size: .78rem;
+      color: var(--text2); font-family: var(--mono);
+    }
+    .terminal-body {
+      padding: 1.75rem; font-family: var(--mono);
+      font-size: .82rem; line-height: 1.9;
+      overflow-x: auto;
+    }
+    .t-section { color: #7C3AED; font-weight: 700; margin: .5rem 0 .25rem; }
+    .t-ok      { color: #10B981; }
+    .t-fire    { color: #F97316; }
+    .t-result  { color: #7C3AED; }
+    .t-dim     { color: #6E7681; }
+    .t-critical{ color: #EF4444; font-weight: 700; }
+    .t-high    { color: #F97316; font-weight: 700; }
+    .t-medium  { color: #EAB308; }
+    .t-white   { color: #E6EDF3; font-weight: 600; }
+    .t-cyan    { color: #38BDF8; }
+
+    /* ── CTA ──────────────────────────────────────────────────────────── */
+    #cta {
+      padding: 8rem 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(124,58,237,.2) 0%, transparent 70%);
+      text-align: center;
+    }
+    .cta-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900; line-height: 1.15;
+      letter-spacing: -.02em; margin-bottom: 1.25rem;
+    }
+    .cta-sub {
+      font-size: 1.1rem; color: var(--text2);
+      max-width: 520px; margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .cta-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .cta-email {
+      margin-top: 2rem; font-size: .875rem; color: var(--text2);
+    }
+    .cta-email a { color: var(--purple2); }
+
+    /* ── FOOTER ───────────────────────────────────────────────────────── */
+    footer {
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo { font-size: 1rem; font-weight: 700; }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { font-size: .85rem; color: var(--text2); transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: .8rem; color: var(--text2); }
+
+    /* ── Responsive ───────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .graph-layout { grid-template-columns: 1fr; }
+      .pipeline::before { display: none; }
+      .footer-links { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────────────── -->
+<nav>
+  <div class="container nav-inner">
+    <div class="nav-logo">
+      <div class="icon">🔗</div>
+      LogiTwin
+    </div>
+    <div class="nav-links">
+      <a href="#how">How It Works</a>
+      <a href="#scenarios">Live Scenarios</a>
+      <a href="#metrics">Performance</a>
+      <a href="#tech">Stack</a>
+      <a href="#usecases">Use Cases</a>
+    </div>
+    <a href="#cta" class="nav-cta">Request Demo</a>
+  </div>
+</nav>
+
+
+<!-- ── HERO ─────────────────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="container">
+    <div class="hero-content">
+
+      <div class="hero-tag fade-up">
+        <span class="dot"></span>
+        Live — Automotive Industry Mock Active
+      </div>
+
+      <h1 class="hero-title fade-up delay-1">
+        Predict.<br>
+        <span class="accent">Simulate.</span><br>
+        <span class="line2">Mitigate.</span>
+      </h1>
+
+      <p class="hero-sub fade-up delay-2">
+        LogiTwin AI Engine detects supply chain disruptions
+        <strong>in under 2 seconds</strong>, scores factory impact across
+        your entire graph, and fires automated carrier hooks —
+        <strong>before your production line stops.</strong>
+      </p>
+
+      <div class="hero-actions fade-up delay-3">
+        <a href="#cta" class="btn-primary">
+          🚀 Request a Demo
+        </a>
+        <a href="https://github.com" target="_blank" class="btn-secondary">
+          ⭐ View on GitHub
+        </a>
+      </div>
+
+      <!-- Live ticker -->
+      <div class="ticker-wrap fade-up delay-4" style="margin-top:3rem;border-radius:10px;overflow:hidden">
+        <div class="ticker">
+          <span class="ticker-item"><span class="ticker-dot" style="background:#EF4444"></span>BMW India — CRITICAL — Score 6.75 — Hamburg port blocked</span>
+          <span class="ticker-item"><span class="ticker-dot" style="background:#F97316"></span>Honda India — HIGH — Score 4.59 — Renesas offline</span>
+          <span class="ticker-item"><span class="ticker-dot" style="background:#F97316"></span>MG Motor — HIGH — Score 4.5 — TSMC supply gap</span>
+          <span class="ticker-item"><span class="ticker-dot" style="background:#F97316"></span>Toyota Bangalore — HIGH — Score 2.85 — Yokohama congested</span>
+          <span class="ticker-item"><span class="ticker-dot" style="background:#EAB308"></span>Maruti Suzuki — MEDIUM — Score 1.94 — multi-path disruption</span>
+          <span class="ticker-item"><span class="ticker-dot" style="background:#10B981"></span>Tata Steel domestic — LOW — Score 0.09 — capacity stable</span>
+          <!-- duplicate for seamless loop -->
+          <span class="ticker-item"><span class="ticker-dot" style="background:#EF4444"></span>BMW India — CRITICAL — Score 6.75 — Hamburg port blocked</span>
+          <span class="ticker-item"><span class="ticker-dot" style="background:#F97316"></span>Honda India — HIGH — Score 4.59 — Renesas offline</span>
+          <span class="ticker-item"><span class="ticker-dot" style="background:#F97316"></span>MG Motor — HIGH — Score 4.5 — TSMC supply gap</span>
+          <span class="ticker-item"><span class="ticker-dot" style="background:#F97316"></span>Toyota Bangalore — HIGH — Score 2.85 — Yokohama congested</span>
+          <span class="ticker-item"><span class="ticker-dot" style="background:#EAB308"></span>Maruti Suzuki — MEDIUM — Score 1.94 — multi-path disruption</span>
+          <span class="ticker-item"><span class="ticker-dot" style="background:#10B981"></span>Tata Steel domestic — LOW — Score 0.09 — capacity stable</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ── STATS ─────────────────────────────────────────────────────────────── -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-num" id="cnt-sims">9</div>
+        <div class="stat-label">Simulations Run</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">66+</div>
+        <div class="stat-label">Factory Impact Paths</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">&lt;2s</div>
+        <div class="stat-label">Simulation Response</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">31</div>
+        <div class="stat-label">Suppliers Modeled</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">81</div>
+        <div class="stat-label">Tests Passing</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">₹0</div>
+        <div class="stat-label">Infra Cost to Start</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── HOW IT WORKS ──────────────────────────────────────────────────────── -->
+<section id="how">
+  <div class="container">
+    <div class="section-header center">
+      <span class="section-tag">How It Works</span>
+      <h2 class="section-title">From disruption to mitigation<br>in one pipeline</h2>
+      <p class="section-sub">
+        LogiTwin models your supply chain as a live graph. When any node fails,
+        the engine traverses every downstream path and scores the impact — automatically.
+      </p>
+    </div>
+
+    <div class="pipeline">
+      <div class="pipeline-step fade-up delay-1">
+        <div class="step-icon">
+          📡
+          <span class="step-num">1</span>
+        </div>
+        <div class="step-title">Ingest</div>
+        <div class="step-desc">Suppliers, factories, ports and all relationships ingested via REST API into Neo4j graph database with strict Pydantic v2 validation.</div>
+      </div>
+      <div class="pipeline-step fade-up delay-2">
+        <div class="step-icon">
+          ⚡
+          <span class="step-num">2</span>
+        </div>
+        <div class="step-title">Detect</div>
+        <div class="step-desc">Disruption event fired — port congestion, supplier offline, capacity degradation, or weather strike. Celery worker picks it up instantly from Redis.</div>
+      </div>
+      <div class="pipeline-step fade-up delay-3">
+        <div class="step-icon">
+          🕸️
+          <span class="step-num">3</span>
+        </div>
+        <div class="step-title">Traverse</div>
+        <div class="step-desc">BFS graph traversal finds every factory downstream of the disrupted node — via direct SUPPLIES paths and maritime SHIPS_THROUGH routes simultaneously.</div>
+      </div>
+      <div class="pipeline-step fade-up delay-4">
+        <div class="step-icon">
+          📊
+          <span class="step-num">4</span>
+        </div>
+        <div class="step-title">Score</div>
+        <div class="step-desc">Impact formula: severity × transit_days × (1 − capacity_rate). Every factory ranked CRITICAL / HIGH / MEDIUM / LOW. Results written to Neo4j.</div>
+      </div>
+      <div class="pipeline-step fade-up delay-5">
+        <div class="step-icon">
+          🛡️
+          <span class="step-num">5</span>
+        </div>
+        <div class="step-title">Mitigate</div>
+        <div class="step-desc">Hook registry fires async carrier API calls — reroute via alternate port, activate backup supplier, notify procurement. Audit trail written to graph.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── LIVE SCENARIOS ────────────────────────────────────────────────────── -->
+<section id="scenarios">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Live Proof of Work</span>
+      <h2 class="section-title">3 real automotive scenarios.<br>Real impact scores.</h2>
+      <p class="section-sub">
+        These are actual simulation results from our automotive industry mock —
+        31 suppliers, 11 factories, 8 ports across India, Japan, Germany and South Korea.
+      </p>
+    </div>
+
+    <div class="scenarios-grid">
+
+      <!-- Scenario A -->
+      <div class="scenario-card">
+        <div class="scenario-header">
+          <div class="scenario-icon" style="background:rgba(239,68,68,.1)">🏭</div>
+          <div>
+            <div class="scenario-title">Japan Semiconductor Shortage</div>
+            <div class="scenario-desc">TSMC + Renesas + Samsung offline simultaneously. 80% of India's automotive chip supply gone dark.</div>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="impact-row">
+            <span class="impact-factory">MG Motor India Vadodara</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#F97316">4.50</span>
+              <span class="badge badge-orange">HIGH</span>
+            </div>
+          </div>
+          <div class="impact-row">
+            <span class="impact-factory">Toyota Kirloskar Bangalore</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#F97316">2.85</span>
+              <span class="badge badge-orange">HIGH</span>
+            </div>
+          </div>
+          <div class="impact-row">
+            <span class="impact-factory">Honda Cars India Rajasthan</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#F97316">4.60</span>
+              <span class="badge badge-orange">HIGH</span>
+            </div>
+          </div>
+          <div class="impact-row">
+            <span class="impact-factory">Tata Motors Pune Assembly</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#F97316">2.52</span>
+              <span class="badge badge-orange">HIGH</span>
+            </div>
+          </div>
+          <div class="impact-row">
+            <span class="impact-factory">Hyundai Motor India Chennai</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#F97316">2.10</span>
+              <span class="badge badge-orange">HIGH</span>
+            </div>
+          </div>
+        </div>
+        <div class="scenario-footer">
+          <div><span class="badge badge-orange">3 suppliers offline</span>&nbsp;<span class="badge" style="background:rgba(124,58,237,.1);color:#9D5CFF;border:1px solid rgba(124,58,237,.3)">20 paths analyzed</span></div>
+          <div class="sim-time"><span class="sim-dot"></span>~2s detection</div>
+        </div>
+      </div>
+
+      <!-- Scenario B -->
+      <div class="scenario-card">
+        <div class="scenario-header">
+          <div class="scenario-icon" style="background:rgba(239,68,68,.15)">🚢</div>
+          <div>
+            <div class="scenario-title">Suez Canal Port Blockage</div>
+            <div class="scenario-desc">Hamburg + Yokohama + Busan congested. German, Japanese, Korean supply routes to India all blocked.</div>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="impact-row">
+            <span class="impact-factory">BMW Group India Chennai</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#EF4444;font-weight:700">6.75</span>
+              <span class="badge badge-red">CRITICAL</span>
+            </div>
+          </div>
+          <div class="impact-row">
+            <span class="impact-factory">Mahindra & Mahindra Chennai</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#F97316">4.86</span>
+              <span class="badge badge-orange">HIGH</span>
+            </div>
+          </div>
+          <div class="impact-row">
+            <span class="impact-factory">Honda Cars India Rajasthan</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#F97316">4.11</span>
+              <span class="badge badge-orange">HIGH</span>
+            </div>
+          </div>
+          <div class="impact-row">
+            <span class="impact-factory">Toyota Kirloskar Bangalore</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#F97316">2.55</span>
+              <span class="badge badge-orange">HIGH</span>
+            </div>
+          </div>
+          <div class="impact-row">
+            <span class="impact-factory">MG Motor India Vadodara</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#F97316">3.38</span>
+              <span class="badge badge-orange">HIGH</span>
+            </div>
+          </div>
+        </div>
+        <div class="scenario-footer">
+          <div><span class="badge badge-red">1 CRITICAL event</span>&nbsp;<span class="badge" style="background:rgba(124,58,237,.1);color:#9D5CFF;border:1px solid rgba(124,58,237,.3)">43 paths analyzed</span></div>
+          <div class="sim-time"><span class="sim-dot"></span>~2s detection</div>
+        </div>
+      </div>
+
+      <!-- Scenario C -->
+      <div class="scenario-card">
+        <div class="scenario-header">
+          <div class="scenario-icon" style="background:rgba(234,179,8,.1)">🌡️</div>
+          <div>
+            <div class="scenario-title">India Heatwave Capacity Collapse</div>
+            <div class="scenario-desc">Maruti, Hyundai & Tata capacity degraded to 20-30%. 60%+ of India's car output at immediate risk.</div>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="impact-row">
+            <span class="impact-factory">Maruti Suzuki Gurugram</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#EAB308">Direct hit</span>
+              <span class="badge badge-yellow">LOW cascade</span>
+            </div>
+          </div>
+          <div class="impact-row">
+            <span class="impact-factory">Hyundai Motor India Chennai</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#EAB308">Direct hit</span>
+              <span class="badge badge-yellow">LOW cascade</span>
+            </div>
+          </div>
+          <div class="impact-row">
+            <span class="impact-factory">Tata Motors Pune Assembly</span>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="impact-score" style="color:#EAB308">Direct hit</span>
+              <span class="badge badge-yellow">LOW cascade</span>
+            </div>
+          </div>
+          <div style="margin-top:1rem;padding:.75rem;background:rgba(234,179,8,.06);border:1px solid rgba(234,179,8,.2);border-radius:8px;font-size:.78rem;color:#8B949E;line-height:1.6">
+            <strong style="color:#EAB308">Why LOW score is correct:</strong>
+            Factory IS the disruption. Suppliers are unaffected.
+            Mitigation: shift production, activate overtime elsewhere.
+            No supply chain cascade — engine correctly isolates the failure type.
+          </div>
+        </div>
+        <div class="scenario-footer">
+          <div><span class="badge badge-yellow">3 factories degraded</span>&nbsp;<span class="badge" style="background:rgba(124,58,237,.1);color:#9D5CFF;border:1px solid rgba(124,58,237,.3)">60% output at risk</span></div>
+          <div class="sim-time"><span class="sim-dot"></span>~2s detection</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ── GRAPH SCHEMA ───────────────────────────────────────────────────────── -->
+<section id="graph">
+  <div class="container">
+    <div class="graph-layout">
+
+      <!-- SVG Graph Visualization -->
+      <div class="graph-canvas">
+        <svg class="graph-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <!-- Edges -->
+          <g stroke="#30363D" stroke-width="1.5" fill="none">
+            <line x1="200" y1="80"  x2="80"  y2="200" stroke="#7C3AED" stroke-opacity=".6"/>
+            <line x1="200" y1="80"  x2="200" y2="200" stroke="#7C3AED" stroke-opacity=".6"/>
+            <line x1="200" y1="80"  x2="320" y2="200" stroke="#7C3AED" stroke-opacity=".6"/>
+            <line x1="80"  y1="200" x2="120" y2="320" stroke="#38BDF8" stroke-opacity=".5"/>
+            <line x1="80"  y1="200" x2="200" y2="340" stroke="#38BDF8" stroke-opacity=".5"/>
+            <line x1="200" y1="200" x2="120" y2="320" stroke="#38BDF8" stroke-opacity=".5"/>
+            <line x1="200" y1="200" x2="200" y2="340" stroke="#38BDF8" stroke-opacity=".5"/>
+            <line x1="200" y1="200" x2="280" y2="320" stroke="#38BDF8" stroke-opacity=".5"/>
+            <line x1="320" y1="200" x2="200" y2="340" stroke="#38BDF8" stroke-opacity=".5"/>
+            <line x1="320" y1="200" x2="280" y2="320" stroke="#38BDF8" stroke-opacity=".5"/>
+          </g>
+
+          <!-- Port nodes (middle row) -->
+          <g>
+            <circle cx="80"  cy="200" r="22" fill="#0D1117" stroke="#38BDF8" stroke-width="2"/>
+            <text x="80" y="204" text-anchor="middle" font-size="14" fill="#38BDF8">🚢</text>
+            <text x="80" y="236" text-anchor="middle" font-size="9" fill="#8B949E">Hamburg</text>
+
+            <circle cx="200" cy="200" r="22" fill="#0D1117" stroke="#38BDF8" stroke-width="2"/>
+            <text x="200" y="204" text-anchor="middle" font-size="14" fill="#38BDF8">🚢</text>
+            <text x="200" y="236" text-anchor="middle" font-size="9" fill="#8B949E">Yokohama</text>
+
+            <circle cx="320" cy="200" r="22" fill="#0D1117" stroke="#38BDF8" stroke-width="2"/>
+            <text x="320" y="204" text-anchor="middle" font-size="14" fill="#38BDF8">🚢</text>
+            <text x="320" y="236" text-anchor="middle" font-size="9" fill="#8B949E">Busan</text>
+          </g>
+
+          <!-- Supplier node (top) -->
+          <circle cx="200" cy="80" r="28" fill="#0D1117" stroke="#7C3AED" stroke-width="2.5"/>
+          <text x="200" y="84" text-anchor="middle" font-size="16" fill="#7C3AED">🏭</text>
+          <text x="200" y="118" text-anchor="middle" font-size="9" fill="#8B949E">TSMC / Bosch</text>
+
+          <!-- Factory nodes (bottom) -->
+          <g>
+            <circle cx="120" cy="320" r="20" fill="#0D1117" stroke="#10B981" stroke-width="2"/>
+            <text x="120" y="324" text-anchor="middle" font-size="12" fill="#10B981">🏗️</text>
+            <text x="120" y="350" text-anchor="middle" font-size="8" fill="#8B949E">Maruti</text>
+
+            <circle cx="200" cy="340" r="20" fill="#0D1117" stroke="#EF4444" stroke-width="2.5"/>
+            <text x="200" y="344" text-anchor="middle" font-size="12" fill="#EF4444">🏗️</text>
+            <text x="200" y="370" text-anchor="middle" font-size="8" fill="#EF4444">BMW ⚠</text>
+
+            <circle cx="280" cy="320" r="20" fill="#0D1117" stroke="#F97316" stroke-width="2"/>
+            <text x="280" y="324" text-anchor="middle" font-size="12" fill="#F97316">🏗️</text>
+            <text x="280" y="350" text-anchor="middle" font-size="8" fill="#8B949E">Honda</text>
+          </g>
+
+          <!-- CRITICAL glow on BMW -->
+          <circle cx="200" cy="340" r="28" fill="none" stroke="#EF4444" stroke-width="1" stroke-opacity=".4">
+            <animate attributeName="r" values="20;32;20" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="stroke-opacity" values=".4;0;.4" dur="2s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- Labels -->
+          <text x="135" y="155" font-size="8" fill="#7C3AED" font-family="monospace">SHIPS_THROUGH</text>
+          <text x="60"  y="270" font-size="8" fill="#38BDF8" font-family="monospace">DELIVERS_TO</text>
+          <text x="10"  y="50"  font-size="10" fill="#6E7681">Supply Chain Graph</text>
+        </svg>
+      </div>
+
+      <div class="graph-text">
+        <span class="section-tag">Graph Database</span>
+        <h3>Your supply chain.<br>Modeled as a graph.</h3>
+        <p>
+          Neo4j stores every supplier, factory, and port as a node.
+          Every delivery route as a relationship. When Hamburg port goes down,
+          the engine traverses every path downstream in milliseconds —
+          finding BMW, Mahindra, Tata before your procurement team even knows.
+        </p>
+        <ul class="schema-list">
+          <li class="schema-item">
+            <span class="schema-dot" style="background:#7C3AED"></span>
+            <span style="color:#7C3AED">(:Supplier)</span>
+            <span style="color:#6E7681;margin-left:.5rem">— 31 nodes, Tier 1/2/3</span>
+          </li>
+          <li class="schema-item">
+            <span class="schema-dot" style="background:#10B981"></span>
+            <span style="color:#10B981">(:Factory)</span>
+            <span style="color:#6E7681;margin-left:.5rem">— 11 assembly plants</span>
+          </li>
+          <li class="schema-item">
+            <span class="schema-dot" style="background:#38BDF8"></span>
+            <span style="color:#38BDF8">(:Port)</span>
+            <span style="color:#6E7681;margin-left:.5rem">— 8 global ports</span>
+          </li>
+          <li class="schema-item">
+            <span class="schema-dot" style="background:#F97316"></span>
+            <span style="color:#F97316">[:SHIPS_THROUGH]</span>
+            <span style="color:#6E7681;margin-left:.5rem">— maritime paths</span>
+          </li>
+          <li class="schema-item">
+            <span class="schema-dot" style="background:#EF4444"></span>
+            <span style="color:#EF4444">[:IMPACTS]</span>
+            <span style="color:#6E7681;margin-left:.5rem">— disruption → factory</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ── METRICS ───────────────────────────────────────────────────────────── -->
+<section id="metrics">
+  <div class="container">
+    <div class="section-header center">
+      <span class="section-tag">Performance</span>
+      <h2 class="section-title">Built for enterprise scale.<br>Priced for startups.</h2>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon">⚡</div>
+        <div class="metric-val" style="color:#7C3AED">&lt;2s</div>
+        <div class="metric-label">Simulation Response</div>
+        <div class="metric-desc">From disruption event to full impact score across all factories. Every time. Verified across 9 live automotive simulations.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">🔴</div>
+        <div class="metric-val" style="color:#EF4444">6.75</div>
+        <div class="metric-label">Highest Impact Score</div>
+        <div class="metric-desc">BMW Group India Chennai — Hamburg port blockage scenario. CRITICAL risk. 24-day supply gap identified automatically.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">🕸️</div>
+        <div class="metric-val" style="color:#10B981">66+</div>
+        <div class="metric-label">Impact Paths Analyzed</div>
+        <div class="metric-desc">Across 3 scenarios and 9 simulations. Every direct and maritime supply path traversed and scored in the graph.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">✅</div>
+        <div class="metric-val" style="color:#10B981">81</div>
+        <div class="metric-label">Unit Tests Passing</div>
+        <div class="metric-desc">JWT auth, impact scoring, traversal logic, mock feeds, hook registry, Pydantic models — all covered and green.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">🔗</div>
+        <div class="metric-val" style="color:#38BDF8">23</div>
+        <div class="metric-label">API Endpoints</div>
+        <div class="metric-desc">Ingest, simulate, mitigate, auth, stream — full REST API with OpenAPI docs, JWT auth, and Server-Sent Events.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">💰</div>
+        <div class="metric-val" style="color:#F97316">₹0</div>
+        <div class="metric-label">Infrastructure Cost</div>
+        <div class="metric-desc">Entire MVP runs on WSL 2 + Docker. Neo4j, Redis, FastAPI, Celery — all open source. Zero licensing fees.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── TERMINAL PROOF ─────────────────────────────────────────────────────── -->
+<section id="proof" style="padding:6rem 0;background:var(--bg2);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Real Output</span>
+      <h2 class="section-title">This is what the engine<br>actually produces.</h2>
+      <p class="section-sub">Not a mockup. Not a screenshot filter. Real terminal output from the automotive simulation.</p>
+    </div>
+    <div class="proof-terminal">
+      <div class="terminal-bar">
+        <div class="tbar-dot" style="background:#EF4444"></div>
+        <div class="tbar-dot" style="background:#EAB308"></div>
+        <div class="tbar-dot" style="background:#10B981"></div>
+        <span class="tbar-title">logitwin@engine: ~/projects/logitwin$ python3 scripts/run_mock_report.py</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-section">═══ SCENARIO B — SUEZ CANAL / GLOBAL PORT BLOCKAGE ═══</div>
+        <br>
+        <div class="t-fire">🔥 Firing: Port of Hamburg CONGESTED (severity: 0.9)</div>
+        <div class="t-dim">&nbsp;&nbsp;&nbsp;Type: port_congestion | Node: port-hamburg-001 | Severity: 0.9</div>
+        <div class="t-dim">&nbsp;&nbsp;&nbsp;Queued → task_id: 966209f4-626c-4911-9d7e-...</div>
+        <br>
+        <div class="t-dim">&nbsp;&nbsp;┌─ What LogiTwin is doing right now:</div>
+        <div class="t-dim">&nbsp;&nbsp;│&nbsp;&nbsp;1. Celery worker dequeued the task from Redis</div>
+        <div class="t-dim">&nbsp;&nbsp;│&nbsp;&nbsp;2. Worker created its own Neo4j driver connection</div>
+        <div class="t-dim">&nbsp;&nbsp;│&nbsp;&nbsp;3. Running Cypher traversal queries on the graph</div>
+        <div class="t-dim">&nbsp;&nbsp;│&nbsp;&nbsp;4. Scoring each affected factory with impact formula</div>
+        <div class="t-dim">&nbsp;&nbsp;│&nbsp;&nbsp;5. Writing DISRUPTION_EVENT node back to Neo4j</div>
+        <div class="t-dim">&nbsp;&nbsp;└─ Polling every 2 seconds...</div>
+        <br>
+        <div class="t-ok">✅ Complete | event: evt-d6906c5f8f31 | factories hit: 16 | risk: <span class="t-critical">CRITICAL</span></div>
+        <br>
+        <div class="t-white">&nbsp;&nbsp;┌─ Simulation Result</div>
+        <div class="t-white">&nbsp;&nbsp;│&nbsp;&nbsp;Factories Hit: &nbsp;&nbsp;&nbsp;16 factory paths</div>
+        <div class="t-white">&nbsp;&nbsp;│&nbsp;&nbsp;Highest Risk:&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-critical">CRITICAL</span></div>
+        <br>
+        <div class="t-dim">&nbsp;&nbsp;│&nbsp;&nbsp;Factory Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Score &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Risk</div>
+        <div class="t-dim">&nbsp;&nbsp;│&nbsp;&nbsp;──────────────────────────────────────────────────────</div>
+        <div>&nbsp;&nbsp;│&nbsp;&nbsp;<span class="t-white">BMW Group India Chennai &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-critical">6.75 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CRITICAL</span></div>
+        <div>&nbsp;&nbsp;│&nbsp;&nbsp;<span class="t-white">BMW Group India Chennai &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-critical">6.48 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CRITICAL</span></div>
+        <div>&nbsp;&nbsp;│&nbsp;&nbsp;<span class="t-white">Mahindra & Mahindra Chennai &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-high">4.86 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HIGH</span></div>
+        <div>&nbsp;&nbsp;│&nbsp;&nbsp;<span class="t-white">Mahindra & Mahindra Chennai &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-high">4.68 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HIGH</span></div>
+        <div>&nbsp;&nbsp;│&nbsp;&nbsp;<span class="t-white">Tata Motors Pune Assembly &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-high">2.916 &nbsp;&nbsp;&nbsp;&nbsp;HIGH</span></div>
+        <div>&nbsp;&nbsp;│&nbsp;&nbsp;<span class="t-white">Maruti Suzuki Gurugram Plant &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-medium">1.944 &nbsp;&nbsp;&nbsp;&nbsp;MEDIUM</span></div>
+        <div class="t-dim">&nbsp;&nbsp;│&nbsp;&nbsp;... and 10 more factory paths</div>
+        <div class="t-dim">&nbsp;&nbsp;└──────────────────────────────────────────────────────</div>
+        <br>
+        <div class="t-section">═══ PROOF OF WORK ═══</div>
+        <br>
+        <div class="t-ok">✅ "9 disruption simulations run"</div>
+        <div class="t-ok">✅ "66+ factory impact paths analyzed"</div>
+        <div class="t-ok">✅ "Sub-2-second simulation response time"</div>
+        <div class="t-ok">✅ "31 suppliers, 11 factories, 8 ports modeled"</div>
+        <div class="t-ok">✅ "Highest impact score: 6.75 — BMW Group India Chennai"</div>
+        <div class="t-ok">✅ "81 unit tests passing"</div>
+        <div class="t-ok">✅ "₹0 infrastructure cost to build MVP"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── TECH STACK ─────────────────────────────────────────────────────────── -->
+<section id="tech">
+  <div class="container">
+    <div class="section-header center">
+      <span class="section-tag">Technology</span>
+      <h2 class="section-title">Enterprise-grade stack.<br>Zero licensing cost.</h2>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-icon">⚡</div>
+        <div class="tech-name">FastAPI</div>
+        <div class="tech-role">Async REST API</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🕸️</div>
+        <div class="tech-name">Neo4j</div>
+        <div class="tech-role">Graph Database</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🐍</div>
+        <div class="tech-name">Python 3.11</div>
+        <div class="tech-role">Runtime</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">📦</div>
+        <div class="tech-name">Pydantic v2</div>
+        <div class="tech-role">Validation</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">⚙️</div>
+        <div class="tech-name">Celery</div>
+        <div class="tech-role">Task Queue</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🔴</div>
+        <div class="tech-name">Redis</div>
+        <div class="tech-role">Message Broker</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🌐</div>
+        <div class="tech-name">HTTPX</div>
+        <div class="tech-role">Async HTTP</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🐳</div>
+        <div class="tech-name">Docker</div>
+        <div class="tech-role">Containers</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🔐</div>
+        <div class="tech-name">JWT Auth</div>
+        <div class="tech-role">Security</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">📊</div>
+        <div class="tech-name">Streamlit</div>
+        <div class="tech-role">Dashboard</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">✅</div>
+        <div class="tech-name">pytest</div>
+        <div class="tech-role">81 Tests</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🚀</div>
+        <div class="tech-name">GitHub CI</div>
+        <div class="tech-role">Automation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── USE CASES ──────────────────────────────────────────────────────────── -->
+<section id="usecases">
+  <div class="container">
+    <div class="section-header center">
+      <span class="section-tag">Use Cases</span>
+      <h2 class="section-title">Any industry with<br>a supply chain.</h2>
+    </div>
+    <div class="usecases-grid">
+      <div class="usecase-card">
+        <div class="usecase-icon">🚗</div>
+        <div class="usecase-title">Automotive</div>
+        <div class="usecase-desc">Model Tier 1/2/3 suppliers, assembly plants, and global port dependencies. Detect chip shortages, steel disruptions, and port blockages before they halt production.</div>
+        <div class="usecase-tags">
+          <span class="usecase-tag">Semiconductor shortage</span>
+          <span class="usecase-tag">Port blockage</span>
+          <span class="usecase-tag">Capacity degradation</span>
+        </div>
+      </div>
+      <div class="usecase-card">
+        <div class="usecase-icon">💊</div>
+        <div class="usecase-title">Pharmaceuticals</div>
+        <div class="usecase-desc">Model API ingredient suppliers, manufacturing sites, and cold chain ports. Detect raw material shortages and regulatory port closures before drug supply is affected.</div>
+        <div class="usecase-tags">
+          <span class="usecase-tag">API ingredient supply</span>
+          <span class="usecase-tag">Cold chain</span>
+          <span class="usecase-tag">Regulatory disruption</span>
+        </div>
+      </div>
+      <div class="usecase-card">
+        <div class="usecase-icon">📱</div>
+        <div class="usecase-title">Electronics</div>
+        <div class="usecase-desc">Track semiconductor suppliers, rare earth dependencies, and PCB assembly plants globally. Model Taiwan Strait risks and Korean supplier concentration.</div>
+        <div class="usecase-tags">
+          <span class="usecase-tag">Rare earth shortage</span>
+          <span class="usecase-tag">Geopolitical risk</span>
+          <span class="usecase-tag">Fab capacity</span>
+        </div>
+      </div>
+      <div class="usecase-card">
+        <div class="usecase-icon">🛒</div>
+        <div class="usecase-title">FMCG & Retail</div>
+        <div class="usecase-desc">Model packaging suppliers, contract manufacturers, and distribution warehouses. Detect upstream failures before shelf stockouts impact revenue.</div>
+        <div class="usecase-tags">
+          <span class="usecase-tag">Packaging shortage</span>
+          <span class="usecase-tag">Warehouse capacity</span>
+          <span class="usecase-tag">Last-mile disruption</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── CTA ───────────────────────────────────────────────────────────────── -->
+<section id="cta">
+  <div class="container">
+    <h2 class="cta-title fade-up">
+      Ready to protect your<br>
+      <span style="color:var(--purple2)">supply chain?</span>
+    </h2>
+    <p class="cta-sub fade-up delay-1">
+      LogiTwin is built, tested, and running.
+      Request a live demo — we'll run your actual supply chain
+      through the simulation engine in real time.
+    </p>
+    <div class="cta-actions fade-up delay-2">
+      <a href="mailto:shivangwork1121@gmail.com" class="btn-primary">
+        📧 Request a Demo
+      </a>
+      <a href="https://github.com" target="_blank" class="btn-secondary">
+        ⭐ View Source on GitHub
+      </a>
+    </div>
+    <p class="cta-email fade-up delay-3">
+      Or email directly: <a href="mailto:shivangwork1121@gmail.com">shivangwork1121@gmail.com</a>
+    </p>
+  </div>
+</section>
+
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="container footer-inner">
+    <div class="nav-logo">
+      <div class="icon" style="width:28px;height:28px;font-size:.85rem">🔗</div>
+      LogiTwin AI Engine
+    </div>
+    <div class="footer-links">
+      <a href="#how">How It Works</a>
+      <a href="#scenarios">Scenarios</a>
+      <a href="#tech">Stack</a>
+      <a href="#cta">Contact</a>
+    </div>
+    <div class="footer-copy">
+      Built with Claude · Anthropic · Solo Developer Edition
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
