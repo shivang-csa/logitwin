@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industries — LogiTwin AI Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#000000;--bg2:#0D0D1A;--bg3:#12121F;--border:#1E1E35;--border2:#2A2A45;--text:#F0F0FF;--text2:#8888AA;--text3:#4A4A6A;--purple:#7C3AED;--purple2:#9D5CFF;--purple3:#BFA0FF;--green:#00DC82;--red:#FF4444;--orange:#FF6B35;--yellow:#FFD93D;--blue:#00D4FF;--font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace}
+html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--black);color:var(--text);line-height:1.6;overflow-x:hidden}a{text-decoration:none;color:inherit}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--black)}::-webkit-scrollbar-thumb{background:var(--purple);border-radius:2px}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 40px;max-width:1440px;margin:0 auto}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#4F1BBE);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(124,58,237,.5)}
+.nav-links{display:flex;align-items:center;gap:8px}
+.nav-links a{font-size:.82rem;font-weight:500;color:var(--text2);padding:.4rem .9rem;border-radius:8px;transition:all .2s}
+.nav-links a:hover{color:var(--text);background:var(--bg3)}.nav-links a.active{color:var(--purple3);background:rgba(124,58,237,.1)}
+.nav-cta{background:var(--purple);color:white;padding:.5rem 1.25rem;border-radius:8px;font-size:.82rem;font-weight:600;transition:all .2s;border:1px solid rgba(157,92,255,.3)}
+.nav-cta:hover{background:var(--purple2);transform:translateY(-1px)}
+.page-header{padding:120px 40px 60px;max-width:1440px;margin:0 auto;border-bottom:1px solid var(--border)}
+.breadcrumb{font-size:.75rem;color:var(--text3);margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}
+.breadcrumb a{color:var(--text3)}.breadcrumb a:hover{color:var(--purple3)}.breadcrumb span{color:var(--border2)}
+.page-title{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:900;letter-spacing:-.04em;line-height:1.05;margin-bottom:1.25rem}
+.page-title .accent{background:linear-gradient(135deg,#FFD93D,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-sub{font-size:1.1rem;color:var(--text2);max-width:640px;line-height:1.8}
+.section{padding:6rem 0}.section-inner{max-width:1440px;margin:0 auto;padding:0 40px}
+.section-tag{display:inline-block;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:var(--purple3);margin-bottom:.75rem}
+.section-title{font-size:clamp(1.8rem,3.5vw,3rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:1rem}
+.section-sub{font-size:1rem;color:var(--text2);max-width:560px;line-height:1.8}.section-header{margin-bottom:3.5rem}
+
+/* INDUSTRY SECTIONS */
+.industry-block{padding:6rem 0;border-bottom:1px solid var(--border)}
+.industry-block:last-child{border-bottom:none}
+.industry-inner{max-width:1440px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
+.industry-inner.reverse{direction:rtl}.industry-inner.reverse > *{direction:ltr}
+.ind-tag{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem}
+.ind-title{font-size:clamp(1.8rem,3vw,2.8rem);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:1rem}
+.ind-desc{font-size:.95rem;color:var(--text2);line-height:1.8;margin-bottom:2rem}
+.ind-scenarios{display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem}
+.ind-scenario{padding:1rem 1.25rem;border-radius:10px;border:1px solid;background:transparent}
+.ind-scenario-title{font-size:.85rem;font-weight:700;margin-bottom:.2rem}
+.ind-scenario-desc{font-size:.78rem;color:var(--text2)}
+.ind-metrics{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.ind-metric{padding:1rem;background:var(--bg2);border-radius:10px;border:1px solid var(--border)}
+.im-num{font-size:1.6rem;font-weight:900;font-family:var(--mono);line-height:1;margin-bottom:.2rem}
+.im-label{font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+
+/* VISUAL CARDS */
+.ind-visual{display:flex;flex-direction:column;gap:1rem}
+.ind-graph-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.75rem;transition:border-color .3s}
+.ind-graph-card:hover{border-color:var(--border2)}
+.igc-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.igc-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.igc-title{font-size:.9rem;font-weight:700}
+.igc-sub{font-size:.75rem;color:var(--text2)}
+.supply-chain-mini{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.72rem;font-family:var(--mono)}
+.sc-node{padding:.3rem .6rem;border-radius:5px;border:1px solid;font-weight:600}
+.sc-arrow{color:var(--text3)}
+
+/* CTA INDUSTRY */
+.industry-cta{
+  margin-top:4rem;padding:3rem;
+  background:linear-gradient(135deg,rgba(124,58,237,.1) 0%,transparent 60%);
+  border:1px solid var(--border);border-radius:20px;
+  text-align:center;
+}
+.ic-title{font-size:1.6rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.75rem}
+.ic-desc{font-size:.95rem;color:var(--text2);margin-bottom:1.75rem}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;background:var(--purple);color:white;padding:.875rem 2rem;border-radius:10px;font-size:.95rem;font-weight:700;transition:all .25s;border:1px solid rgba(157,92,255,.4);box-shadow:0 0 30px rgba(124,58,237,.4)}
+.btn-primary:hover{background:var(--purple2);transform:translateY(-2px)}
+
+footer{padding:2.5rem 0;border-top:1px solid var(--border);background:var(--black)}
+.footer-inner{max-width:1440px;margin:0 auto;padding:0 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-nav{display:flex;gap:2rem}.footer-nav a{font-size:.8rem;color:var(--text3);transition:color .2s}.footer-nav a:hover{color:var(--text2)}
+.footer-copy{font-size:.78rem;color:var(--text3)}
+.fade-up{opacity:0;transform:translateY(20px);transition:all .7s ease}.fade-up.visible{opacity:1;transform:translateY(0)}
+@media(max-width:1024px){.industry-inner{grid-template-columns:1fr;gap:3rem}.industry-inner.reverse{direction:ltr}}
+@media(max-width:768px){.nav-inner,.page-header,.footer-inner{padding-left:20px;padding-right:20px}.nav-links{display:none}.industry-inner{padding-left:20px;padding-right:20px}.ind-metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="4" r="3" fill="white" opacity=".9"/><circle cx="3" cy="14" r="2.5" fill="white" opacity=".7"/><circle cx="17" cy="14" r="2.5" fill="white" opacity=".7"/><line x1="10" y1="7" x2="3" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/><line x1="10" y1="7" x2="17" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/></svg></div>LogiTwin
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="platform.html">Platform</a><a href="results.html">Proof of Work</a>
+      <a href="technology.html">Technology</a><a href="industries.html" class="active">Industries</a><a href="contact.html">Contact</a>
+    </div>
+    <a href="contact.html" class="nav-cta">Request Demo</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span style="color:var(--text2)">Industries</span></div>
+  <h1 class="page-title">Any industry.<br><span class="accent">Any supply chain.</span></h1>
+  <p class="page-sub">LogiTwin is graph-agnostic. It models any network of suppliers, factories, and ports. The engine doesn't care what you make — only where the chain can break.</p>
+</div>
+
+<!-- AUTOMOTIVE -->
+<div class="industry-block">
+  <div class="industry-inner fade-up">
+    <div>
+      <div class="ind-tag" style="color:var(--orange)">Automotive · Live Mock Available</div>
+      <h2 class="ind-title">India's auto industry.<br>Fully modeled.</h2>
+      <p class="ind-desc">We've already seeded 31 suppliers (Tier 1/2/3), 8 assembly factories (Maruti, Tata, Toyota, BMW, Hyundai, Honda, Mahindra, MG Motor), and 6 global ports into LogiTwin. Run our live automotive mock and see BMW hit CRITICAL in under 2 seconds.</p>
+      <div class="ind-scenarios">
+        <div class="ind-scenario" style="border-color:rgba(255,68,68,.3);background:rgba(255,68,68,.05)">
+          <div class="ind-scenario-title" style="color:var(--red)">Japan Semiconductor Shortage</div>
+          <div class="ind-scenario-desc">TSMC + Renesas + Samsung offline → 20+ factory impact paths → all Indian OEMs at HIGH risk</div>
+        </div>
+        <div class="ind-scenario" style="border-color:rgba(255,107,53,.3);background:rgba(255,107,53,.05)">
+          <div class="ind-scenario-title" style="color:var(--orange)">Suez Canal Port Blockage</div>
+          <div class="ind-scenario-desc">Hamburg + Yokohama + Busan congested → BMW CRITICAL 6.75 → 43 factory impact paths</div>
+        </div>
+        <div class="ind-scenario" style="border-color:rgba(255,217,61,.3);background:rgba(255,217,61,.05)">
+          <div class="ind-scenario-title" style="color:var(--yellow)">India Heatwave Capacity Collapse</div>
+          <div class="ind-scenario-desc">Maruti + Hyundai + Tata degraded → 60%+ of India auto output at risk</div>
+        </div>
+      </div>
+      <div class="ind-metrics">
+        <div class="ind-metric"><div class="im-num" style="color:var(--orange)">31</div><div class="im-label">Suppliers Seeded</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--orange)">8</div><div class="im-label">Assembly Plants</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--red)">6.75</div><div class="im-label">Highest Score</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--green)">&lt;2s</div><div class="im-label">Detection</div></div>
+      </div>
+    </div>
+    <div class="ind-visual">
+      <div class="ind-graph-card">
+        <div class="igc-header">
+          <div class="igc-icon" style="background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L2 6.5V11C2 15.4 6 19 11 19C16 19 20 15.4 20 11V6.5L11 2Z" stroke="#FF4444" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div class="igc-title">BMW Group India — CRITICAL</div><div class="igc-sub">Impact score: 6.75 · Hamburg blocked</div></div>
+        </div>
+        <div class="supply-chain-mini">
+          <div class="sc-node" style="color:var(--purple3);border-color:rgba(124,58,237,.3)">Bosch Stuttgart</div>
+          <div class="sc-arrow">→</div>
+          <div class="sc-node" style="color:var(--blue);border-color:rgba(0,212,255,.3)">Hamburg Port ⚠</div>
+          <div class="sc-arrow">→</div>
+          <div class="sc-node" style="color:var(--red);border-color:rgba(255,68,68,.3)">BMW Chennai</div>
+        </div>
+        <div style="margin-top:.75rem;font-size:.72rem;color:var(--text3);font-family:var(--mono)">Transit: 24 days · Vulnerability: 0.30 · Score = 0.9×24×0.30 = 6.48</div>
+      </div>
+      <div class="ind-graph-card">
+        <div class="igc-header">
+          <div class="igc-icon" style="background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.3)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#FF6B35" stroke-width="1.8"/><path d="M11 6V11L14 13" stroke="#FF6B35" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="igc-title">Honda Cars India — HIGH</div><div class="igc-sub">Impact score: 4.60 · Renesas offline</div></div>
+        </div>
+        <div class="supply-chain-mini">
+          <div class="sc-node" style="color:var(--purple3);border-color:rgba(124,58,237,.3)">Renesas Tokyo ⚠</div>
+          <div class="sc-arrow">→</div>
+          <div class="sc-node" style="color:var(--blue);border-color:rgba(0,212,255,.3)">Yokohama Port</div>
+          <div class="sc-arrow">→</div>
+          <div class="sc-node" style="color:var(--orange);border-color:rgba(255,107,53,.3)">Honda Rajasthan</div>
+        </div>
+        <div style="margin-top:.75rem;font-size:.72rem;color:var(--text3);font-family:var(--mono)">Transit: 22 days · Vulnerability: 0.22 · Score = 0.95×22×0.22 = 4.60</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHARMA -->
+<div class="industry-block" style="background:var(--bg2)">
+  <div class="industry-inner reverse fade-up">
+    <div>
+      <div class="ind-tag" style="color:var(--green)">Pharmaceuticals</div>
+      <h2 class="ind-title">Drug supply chains<br>can't afford downtime.</h2>
+      <p class="ind-desc">Pharmaceutical supply chains are critically dependent on a small number of API (Active Pharmaceutical Ingredient) ingredient suppliers — most concentrated in India and China. A single factory shutdown can disrupt drug supply for millions of patients. LogiTwin models every API ingredient path, cold chain port dependency, and regulatory risk node.</p>
+      <div class="ind-scenarios">
+        <div class="ind-scenario" style="border-color:rgba(0,220,130,.3);background:rgba(0,220,130,.05)">
+          <div class="ind-scenario-title" style="color:var(--green)">API Ingredient Shortage</div>
+          <div class="ind-scenario-desc">Key chemical API supplier offline → which drug manufacturing plants are affected and by how many days?</div>
+        </div>
+        <div class="ind-scenario" style="border-color:rgba(0,220,130,.3);background:rgba(0,220,130,.05)">
+          <div class="ind-scenario-title" style="color:var(--green)">Cold Chain Port Disruption</div>
+          <div class="ind-scenario-desc">Temperature-controlled cargo delayed at port → biologics expiry risk → which batches are at risk?</div>
+        </div>
+        <div class="ind-scenario" style="border-color:rgba(0,220,130,.3);background:rgba(0,220,130,.05)">
+          <div class="ind-scenario-title" style="color:var(--green)">Regulatory Port Closure</div>
+          <div class="ind-scenario-desc">FDA import alert on a specific port → alternative routes modeled → ETA delta calculated</div>
+        </div>
+      </div>
+      <div class="ind-metrics">
+        <div class="ind-metric"><div class="im-num" style="color:var(--green)">API</div><div class="im-label">Ingredients tracked</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--green)">Cold</div><div class="im-label">Chain modeling</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--green)">24/7</div><div class="im-label">Disruption monitoring</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--green)">&lt;2s</div><div class="im-label">Batch risk scored</div></div>
+      </div>
+    </div>
+    <div class="ind-visual">
+      <div class="ind-graph-card">
+        <div class="igc-header">
+          <div class="igc-icon" style="background:rgba(0,220,130,.1);border:1px solid rgba(0,220,130,.3)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M8 2H14V6L17 9V20H5V9L8 6V2Z" stroke="#00DC82" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 12H14M11 12V17" stroke="#00DC82" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="igc-title">Example: Sun Pharma Network</div><div class="igc-sub">Paracetamol API — 3 source suppliers modeled</div></div>
+        </div>
+        <div style="font-size:.78rem;color:var(--text2);line-height:1.7">
+          API ingredient from Hyderabad chemical supplier → JNPT Mumbai → Halol plant. If Hyderabad supplier goes offline, LogiTwin finds backup supplier in Ankleshwar with 5-day lead time delta and $8,000 cost delta automatically.
+        </div>
+      </div>
+      <div class="ind-graph-card">
+        <div class="igc-header">
+          <div class="igc-icon" style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L20 7V15L11 20L2 15V7L11 2Z" stroke="#00D4FF" stroke-width="1.8" stroke-linejoin="round"/><path d="M11 12V8M8 13L11 12L14 13" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="igc-title">Mitigation: Cold Chain Reroute</div><div class="igc-sub">Auto-activated when port clearance &gt; 48h</div></div>
+        </div>
+        <div style="font-size:.78rem;color:var(--text2);line-height:1.7">
+          LogiTwin fires a carrier hook to activate temperature-controlled rerouting via Mundra Port when Chennai clearance exceeds threshold. All actions logged to Neo4j with timestamps, carrier confirmation, and temperature compliance notes.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ELECTRONICS -->
+<div class="industry-block">
+  <div class="industry-inner fade-up">
+    <div>
+      <div class="ind-tag" style="color:var(--blue)">Electronics & Semiconductors</div>
+      <h2 class="ind-title">Taiwan Strait risk.<br>Modeled in minutes.</h2>
+      <p class="ind-desc">Electronics supply chains are the most geopolitically exposed of any industry. TSMC produces 90%+ of the world's advanced chips. A Taiwan Strait crisis isn't theoretical — it's a supply chain scenario every electronics manufacturer should have modeled. LogiTwin can seed your entire semiconductor dependency graph and simulate it.</p>
+      <div class="ind-scenarios">
+        <div class="ind-scenario" style="border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.05)">
+          <div class="ind-scenario-title" style="color:var(--blue)">TSMC Production Halt</div>
+          <div class="ind-scenario-desc">Taiwan fab capacity drops 80% → which assembly plants can no longer source chips → CRITICAL or HIGH?</div>
+        </div>
+        <div class="ind-scenario" style="border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.05)">
+          <div class="ind-scenario-title" style="color:var(--blue)">Rare Earth Export Ban</div>
+          <div class="ind-scenario-desc">China rare earth restriction → which Tier 2 magnet suppliers are affected → which OEMs downstream?</div>
+        </div>
+        <div class="ind-scenario" style="border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.05)">
+          <div class="ind-scenario-title" style="color:var(--blue)">Busan Port Congestion</div>
+          <div class="ind-scenario-desc">Korean semiconductor shipments delayed → Samsung backup via air freight → ETA delta and cost impact</div>
+        </div>
+      </div>
+      <div class="ind-metrics">
+        <div class="ind-metric"><div class="im-num" style="color:var(--blue)">Tier 3</div><div class="im-label">Deep supply tracking</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--blue)">Geo</div><div class="im-label">Political risk modeling</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--blue)">Air</div><div class="im-label">Freight alt routing</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--green)">&lt;2s</div><div class="im-label">Detection</div></div>
+      </div>
+    </div>
+    <div class="ind-visual">
+      <div class="ind-graph-card">
+        <div class="igc-header">
+          <div class="igc-icon" style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="6" width="18" height="10" rx="2" stroke="#00D4FF" stroke-width="1.8"/><path d="M6 6V4M11 6V3M16 6V5" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"/><path d="M6 16V18M11 16V19M16 16V17" stroke="#00D4FF" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="igc-title">Semiconductor Supply Tree</div><div class="igc-sub">Tier 1/2/3 full dependency map</div></div>
+        </div>
+        <div class="supply-chain-mini">
+          <div class="sc-node" style="color:var(--text3);border-color:var(--border)">Neon Gas (Ukraine)</div>
+          <div class="sc-arrow">→</div>
+          <div class="sc-node" style="color:var(--purple3);border-color:rgba(124,58,237,.3)">TSMC Fab</div>
+          <div class="sc-arrow">→</div>
+          <div class="sc-node" style="color:var(--blue);border-color:rgba(0,212,255,.3)">Dixon Tech</div>
+        </div>
+        <div style="margin-top:.5rem;font-size:.72rem;color:var(--text3)">Neon gas shortage → TSMC fab disruption → Dixon assembly halted</div>
+      </div>
+      <div class="ind-graph-card">
+        <div class="igc-header">
+          <div class="igc-icon" style="background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.3)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2L20 11L11 20L2 11L11 2Z" stroke="#FF6B35" stroke-width="1.8" stroke-linejoin="round"/><path d="M11 7V11L13 13" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="igc-title">Geopolitical Risk Scoring</div><div class="igc-sub">Taiwan Strait scenario pre-modeled</div></div>
+        </div>
+        <div style="font-size:.78rem;color:var(--text2);line-height:1.7">
+          LogiTwin can pre-seed Taiwan Strait disruption scenarios. When severity=1.0 is applied to all Taiwan-based supplier nodes simultaneously, the engine identifies every affected factory, scores impact, and ranks mitigation options by cost-effectiveness in seconds.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FMCG -->
+<div class="industry-block" style="background:var(--bg2)">
+  <div class="industry-inner reverse fade-up">
+    <div>
+      <div class="ind-tag" style="color:var(--yellow)">FMCG & Retail</div>
+      <h2 class="ind-title">Shelf stockouts<br>cost crores per day.</h2>
+      <p class="ind-desc">Fast-moving consumer goods supply chains are deceptively complex — hundreds of packaging suppliers, contract manufacturers, and last-mile distribution hubs, all with tight seasonal demand cycles. One packaging supplier going offline during Diwali season can cost ₹5-10 crore in lost revenue per day. LogiTwin detects it before it hits the shelf.</p>
+      <div class="ind-scenarios">
+        <div class="ind-scenario" style="border-color:rgba(255,217,61,.3);background:rgba(255,217,61,.05)">
+          <div class="ind-scenario-title" style="color:var(--yellow)">Packaging Supplier Offline</div>
+          <div class="ind-scenario-desc">Key carton/bottle supplier shuts down → which SKUs are affected → backup sourcing options ranked</div>
+        </div>
+        <div class="ind-scenario" style="border-color:rgba(255,217,61,.3);background:rgba(255,217,61,.05)">
+          <div class="ind-scenario-title" style="color:var(--yellow)">Warehouse Capacity Overload</div>
+          <div class="ind-scenario-desc">Festival season demand spike → distribution warehouse at 95% capacity → overflow rerouting</div>
+        </div>
+        <div class="ind-scenario" style="border-color:rgba(255,217,61,.3);background:rgba(255,217,61,.05)">
+          <div class="ind-scenario-title" style="color:var(--yellow)">Contract Manufacturer Disruption</div>
+          <div class="ind-scenario-desc">Third-party manufacturing plant fire → which product lines stop → alternate co-packer identified</div>
+        </div>
+      </div>
+      <div class="ind-metrics">
+        <div class="ind-metric"><div class="im-num" style="color:var(--yellow)">SKU</div><div class="im-label">Level tracking</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--yellow)">Festival</div><div class="im-label">Season scenarios</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--yellow)">Last</div><div class="im-label">Mile modeling</div></div>
+        <div class="ind-metric"><div class="im-num" style="color:var(--green)">&lt;2s</div><div class="im-label">Detection</div></div>
+      </div>
+    </div>
+    <div class="ind-visual">
+      <div class="ind-graph-card">
+        <div class="igc-header">
+          <div class="igc-icon" style="background:rgba(255,217,61,.1);border:1px solid rgba(255,217,61,.3)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 7H19L17 19H5L3 7Z" stroke="#FFD93D" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 7L8 3H14L15 7" stroke="#FFD93D" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12H13M11 10V14" stroke="#FFD93D" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="igc-title">Example: Dabur Supply Network</div><div class="igc-sub">Hair oil packaging — 6 co-packers mapped</div></div>
+        </div>
+        <div style="font-size:.78rem;color:var(--text2);line-height:1.7">
+          6 packaging suppliers → 3 co-packing factories → JNPT Mumbai distribution hub. If Silvassa packaging supplier goes offline, LogiTwin identifies Vapi backup with 3-day lead time delta and activates the hook automatically.
+        </div>
+      </div>
+      <div class="ind-graph-card">
+        <div class="igc-header">
+          <div class="igc-icon" style="background:rgba(0,220,130,.1);border:1px solid rgba(0,220,130,.3)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 4H18V18H4V4Z" stroke="#00DC82" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 9H18M9 4V18" stroke="#00DC82" stroke-width="1.5"/></svg>
+          </div>
+          <div><div class="igc-title">Seasonal Risk Calendar</div><div class="igc-sub">Pre-model festival season vulnerabilities</div></div>
+        </div>
+        <div style="font-size:.78rem;color:var(--text2);line-height:1.7">
+          Run LogiTwin simulations 60 days before Diwali peak season. Identify which suppliers are single points of failure, which ports are historically congested in October, and pre-activate backup supplier contracts before the disruption occurs.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INDUSTRY CTA -->
+<section class="section">
+  <div class="section-inner">
+    <div class="industry-cta fade-up">
+      <div class="ind-tag" style="color:var(--purple3)">Your Industry</div>
+      <div class="ic-title">Don't see your industry?<br>LogiTwin models any supply chain.</div>
+      <div class="ic-desc">If your business has suppliers, factories, and logistics nodes — LogiTwin can model it. We'll seed your network, run live disruption simulations, and show you what breaks first. Free pilot. No commitment.</div>
+      <a href="contact.html" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L15 8L8 15M1 8H15" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Start Your Free Pilot
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="nav-logo">
+      <div class="logo-mark" style="width:28px;height:28px"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="4" r="3" fill="white" opacity=".9"/><circle cx="3" cy="14" r="2.5" fill="white" opacity=".7"/><circle cx="17" cy="14" r="2.5" fill="white" opacity=".7"/><line x1="10" y1="7" x2="3" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/><line x1="10" y1="7" x2="17" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/></svg></div>LogiTwin AI Engine
+    </div>
+    <div class="footer-nav"><a href="platform.html">Platform</a><a href="results.html">Results</a><a href="technology.html">Technology</a><a href="industries.html">Industries</a><a href="contact.html">Contact</a></div>
+    <div class="footer-copy">© 2026 LogiTwin AI Engine. All rights reserved.</div>
+  </div>
+</footer>
+<script>const o=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1});document.querySelectorAll('.fade-up').forEach(el=>o.observe(el))</script>
+</body>
+</html>

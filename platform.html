@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platform — LogiTwin AI Engine</title>
+<meta name="description" content="LogiTwin Platform — 4 subsystems, 23 API endpoints, graph-native supply chain intelligence.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#000000;--bg:#080810;--bg2:#0D0D1A;--bg3:#12121F;
+  --border:#1E1E35;--border2:#2A2A45;
+  --text:#F0F0FF;--text2:#8888AA;--text3:#4A4A6A;
+  --purple:#7C3AED;--purple2:#9D5CFF;--purple3:#BFA0FF;
+  --purple-glow:rgba(124,58,237,.25);
+  --green:#00DC82;--green-lt:rgba(0,220,130,.1);
+  --red:#FF4444;--red-lt:rgba(255,68,68,.1);
+  --orange:#FF6B35;--orange-lt:rgba(255,107,53,.1);
+  --yellow:#FFD93D;--blue:#00D4FF;--blue-lt:rgba(0,212,255,.1);
+  --font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--black);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:var(--purple);border-radius:2px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 40px;max-width:1440px;margin:0 auto}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#4F1BBE);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(124,58,237,.5)}
+.nav-links{display:flex;align-items:center;gap:8px}
+.nav-links a{font-size:.82rem;font-weight:500;color:var(--text2);padding:.4rem .9rem;border-radius:8px;transition:all .2s}
+.nav-links a:hover{color:var(--text);background:var(--bg3)}
+.nav-links a.active{color:var(--purple3);background:rgba(124,58,237,.1)}
+.nav-cta{background:var(--purple);color:white;padding:.5rem 1.25rem;border-radius:8px;font-size:.82rem;font-weight:600;transition:all .2s;border:1px solid rgba(157,92,255,.3);box-shadow:0 0 20px rgba(124,58,237,.3)}
+.nav-cta:hover{background:var(--purple2);transform:translateY(-1px)}
+
+/* PAGE HEADER */
+.page-header{
+  padding:120px 40px 60px;max-width:1440px;margin:0 auto;
+  border-bottom:1px solid var(--border);
+}
+.breadcrumb{font-size:.75rem;color:var(--text3);margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}
+.breadcrumb a{color:var(--text3);transition:color .2s}
+.breadcrumb a:hover{color:var(--purple3)}
+.breadcrumb span{color:var(--border2)}
+.page-title{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:900;letter-spacing:-.04em;line-height:1.05;margin-bottom:1.25rem}
+.page-title .accent{background:linear-gradient(135deg,#7C3AED,#00D4FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-sub{font-size:1.1rem;color:var(--text2);max-width:640px;line-height:1.8}
+
+/* SECTIONS */
+.section{padding:6rem 0}
+.section-inner{max-width:1440px;margin:0 auto;padding:0 40px}
+.section-tag{display:inline-block;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:var(--purple3);margin-bottom:.75rem}
+.section-title{font-size:clamp(1.8rem,3.5vw,3rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:1rem}
+.section-sub{font-size:1rem;color:var(--text2);max-width:560px;line-height:1.8}
+.section-header{margin-bottom:3.5rem}
+
+/* SUBSYSTEM CARDS */
+.subsystems{display:flex;flex-direction:column;gap:2px;background:var(--border)}
+.subsystem{
+  background:var(--bg2);padding:3rem 40px;
+  display:grid;grid-template-columns:280px 1fr 1fr;gap:4rem;align-items:start;
+  transition:background .3s;
+}
+.subsystem:hover{background:var(--bg3)}
+.ss-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:var(--text3);margin-bottom:.5rem}
+.ss-num{font-size:4rem;font-weight:900;line-height:1;letter-spacing:-.05em;margin-bottom:.5rem}
+.ss-name{font-size:1.3rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.75rem}
+.ss-desc{font-size:.875rem;color:var(--text2);line-height:1.7}
+.ss-files{display:flex;flex-direction:column;gap:.5rem}
+.ss-file{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.6rem .9rem;border-radius:8px;
+  background:var(--bg3);border:1px solid var(--border);
+  font-size:.75rem;font-family:var(--mono);
+  transition:border-color .2s;
+}
+.ss-file:hover{border-color:var(--border2)}
+.ss-file-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.ss-metrics{display:flex;flex-direction:column;gap:.75rem}
+.ss-metric{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;background:var(--bg3);border-radius:8px;border:1px solid var(--border)}
+.ss-metric-label{font-size:.78rem;color:var(--text2)}
+.ss-metric-val{font-size:.85rem;font-weight:700;font-family:var(--mono)}
+
+/* API ENDPOINTS */
+.endpoints-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border)}
+.endpoint{
+  background:var(--bg2);padding:1.5rem 2rem;
+  display:flex;align-items:flex-start;gap:1.25rem;
+  transition:background .3s;
+}
+.endpoint:hover{background:var(--bg3)}
+.method-badge{
+  font-size:.65rem;font-weight:800;font-family:var(--mono);
+  padding:.25rem .6rem;border-radius:5px;flex-shrink:0;
+  margin-top:.15rem;letter-spacing:.05em;
+}
+.method-get{background:rgba(0,220,130,.15);color:var(--green);border:1px solid rgba(0,220,130,.3)}
+.method-post{background:rgba(124,58,237,.15);color:var(--purple3);border:1px solid rgba(124,58,237,.3)}
+.endpoint-path{font-size:.82rem;font-family:var(--mono);color:var(--blue);margin-bottom:.3rem}
+.endpoint-desc{font-size:.78rem;color:var(--text2);line-height:1.5}
+
+/* FORMULA */
+.formula-box{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:16px;padding:2.5rem;margin-bottom:2rem;
+}
+.formula-title{font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.25rem}
+.formula{
+  font-family:var(--mono);font-size:1.1rem;color:var(--text);
+  padding:1.25rem 1.5rem;background:var(--black);
+  border-radius:10px;border:1px solid var(--border);margin-bottom:1.5rem;
+  line-height:1.8;
+}
+.formula .var{color:var(--purple3)}
+.formula .op{color:var(--text3)}
+.formula .result{color:var(--green);font-weight:700}
+.formula-vars{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.formula-var{padding:1rem;background:var(--black);border-radius:8px;border:1px solid var(--border)}
+.fv-name{font-size:.72rem;font-family:var(--mono);color:var(--purple3);margin-bottom:.3rem}
+.fv-desc{font-size:.78rem;color:var(--text2);line-height:1.5}
+
+/* RISK TABLE */
+.risk-table{width:100%;border-collapse:collapse}
+.risk-table th{text-align:left;padding:.75rem 1rem;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);border-bottom:1px solid var(--border)}
+.risk-table td{padding:.875rem 1rem;border-bottom:1px solid var(--border);font-size:.875rem;vertical-align:middle}
+.risk-table tr:last-child td{border-bottom:none}
+.risk-table tr:hover td{background:rgba(255,255,255,.02)}
+.risk-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .75rem;border-radius:6px;font-size:.72rem;font-weight:700;font-family:var(--mono)}
+
+/* GRAPH SCHEMA */
+.schema-visual{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:16px;padding:2.5rem;
+}
+.schema-nodes{display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:2rem}
+.schema-node{
+  padding:.75rem 1.25rem;border-radius:10px;
+  border:1px solid;font-size:.8rem;font-family:var(--mono);font-weight:600;
+}
+.schema-rels{display:flex;flex-direction:column;gap:.75rem}
+.schema-rel{
+  display:flex;align-items:center;gap:1rem;
+  padding:.75rem 1rem;background:var(--black);
+  border-radius:8px;border:1px solid var(--border);
+  font-size:.78rem;
+}
+.rel-arrow{color:var(--text3);font-family:var(--mono)}
+.rel-name{font-family:var(--mono);font-weight:600}
+.rel-props{color:var(--text2);font-size:.72rem}
+
+/* FOOTER */
+footer{padding:2.5rem 0;border-top:1px solid var(--border);background:var(--black)}
+.footer-inner{max-width:1440px;margin:0 auto;padding:0 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-nav{display:flex;gap:2rem}
+.footer-nav a{font-size:.8rem;color:var(--text3);transition:color .2s}
+.footer-nav a:hover{color:var(--text2)}
+.footer-copy{font-size:.78rem;color:var(--text3)}
+
+/* ANIMATIONS */
+.fade-up{opacity:0;transform:translateY(20px);transition:all .7s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:1024px){
+  .subsystem{grid-template-columns:1fr 1fr;gap:2rem}
+  .subsystem .ss-left{grid-column:1/-1}
+  .endpoints-grid{grid-template-columns:1fr}
+  .formula-vars{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .nav-inner,.page-header,.section-inner,.footer-inner{padding-left:20px;padding-right:20px}
+  .nav-links{display:none}
+  .subsystem{grid-template-columns:1fr;padding:2rem 20px;gap:1.5rem}
+  .endpoints-grid{grid-template-columns:1fr}
+  .formula-vars{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="4" r="3" fill="white" opacity=".9"/>
+          <circle cx="3" cy="14" r="2.5" fill="white" opacity=".7"/>
+          <circle cx="17" cy="14" r="2.5" fill="white" opacity=".7"/>
+          <line x1="10" y1="7" x2="3" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/>
+          <line x1="10" y1="7" x2="17" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/>
+          <line x1="3" y1="14" x2="17" y2="14" stroke="white" stroke-width="1.2" opacity=".3"/>
+        </svg>
+      </div>
+      LogiTwin
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="platform.html" class="active">Platform</a>
+      <a href="results.html">Proof of Work</a>
+      <a href="technology.html">Technology</a>
+      <a href="industries.html">Industries</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <a href="contact.html" class="nav-cta">Request Demo</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span>/</span>
+    <span style="color:var(--text2)">Platform</span>
+  </div>
+  <h1 class="page-title">The LogiTwin<br><span class="accent">Platform</span></h1>
+  <p class="page-sub">Four subsystems. 23 API endpoints. One graph-native supply chain intelligence engine built for production from day one.</p>
+</div>
+
+<!-- SUBSYSTEMS -->
+<section class="section" style="padding-top:4rem">
+  <div style="max-width:1440px;margin:0 auto">
+    <div style="padding:0 40px;margin-bottom:2rem">
+      <span class="section-tag">Architecture</span>
+      <h2 class="section-title">Four subsystems.<br>One complete engine.</h2>
+    </div>
+    <div class="subsystems">
+
+      <!-- SS1 -->
+      <div class="subsystem fade-up">
+        <div>
+          <div class="ss-label">Subsystem 1</div>
+          <div class="ss-num" style="color:var(--purple3)">SS1</div>
+          <div class="ss-name">FastAPI Ingestion Engine</div>
+          <div class="ss-desc">The data layer. Suppliers, factories, and ports enter the graph here via strict REST endpoints with Pydantic v2 validation. MERGE-based Neo4j upserts mean re-ingesting never creates duplicates.</div>
+        </div>
+        <div>
+          <div class="ss-label" style="margin-bottom:1rem">8 New Files</div>
+          <div class="ss-files">
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--purple)"></span>app/config.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--purple)"></span>app/models.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--purple)"></span>app/db.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--purple)"></span>app/main.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--purple)"></span>app/services/graph.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--purple)"></span>app/routes/ingest.py</div>
+          </div>
+        </div>
+        <div>
+          <div class="ss-label" style="margin-bottom:1rem">Key Metrics</div>
+          <div class="ss-metrics">
+            <div class="ss-metric"><span class="ss-metric-label">API Endpoints</span><span class="ss-metric-val" style="color:var(--purple3)">8</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">Validation</span><span class="ss-metric-val" style="color:var(--green)">Pydantic v2</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">Database</span><span class="ss-metric-val" style="color:var(--blue)">Neo4j 5.20</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">Pattern</span><span class="ss-metric-val" style="color:var(--text2)">MERGE upsert</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SS2 -->
+      <div class="subsystem fade-up">
+        <div>
+          <div class="ss-label">Subsystem 2</div>
+          <div class="ss-num" style="color:var(--blue)">SS2</div>
+          <div class="ss-name">Stochastic Simulation Engine</div>
+          <div class="ss-desc">The brain. BFS graph traversal finds every downstream factory, the impact formula scores each one, and DISRUPTION_EVENT nodes are written back to Neo4j — all inside a Celery worker with its own Neo4j driver.</div>
+        </div>
+        <div>
+          <div class="ss-label" style="margin-bottom:1rem">7 New Files</div>
+          <div class="ss-files">
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--blue)"></span>app/workers/celery_app.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--blue)"></span>app/workers/simulation.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--blue)"></span>app/workers/mock_feeds.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--blue)"></span>app/services/traversal.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--blue)"></span>app/services/scorer.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--blue)"></span>app/routes/simulation.py</div>
+          </div>
+        </div>
+        <div>
+          <div class="ss-label" style="margin-bottom:1rem">Key Metrics</div>
+          <div class="ss-metrics">
+            <div class="ss-metric"><span class="ss-metric-label">API Endpoints</span><span class="ss-metric-val" style="color:var(--blue)">5</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">Response Time</span><span class="ss-metric-val" style="color:var(--green)">&lt;2s</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">Unit Tests</span><span class="ss-metric-val" style="color:var(--green)">21 passing</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">Queue</span><span class="ss-metric-val" style="color:var(--text2)">Celery + Redis</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SS3 -->
+      <div class="subsystem fade-up">
+        <div>
+          <div class="ss-label">Subsystem 3</div>
+          <div class="ss-num" style="color:var(--orange)">SS3</div>
+          <div class="ss-name">Automated Mitigation Layer</div>
+          <div class="ss-desc">The action layer. Hook registry maps every supply chain node to backup carrier API endpoints. HTTPX async client fires them in parallel — 3 retries, exponential backoff, full exception isolation per connector.</div>
+        </div>
+        <div>
+          <div class="ss-label" style="margin-bottom:1rem">6 New Files</div>
+          <div class="ss-files">
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--orange)"></span>app/workers/hook_registry.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--orange)"></span>app/services/mitigation.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--orange)"></span>app/routes/mitigation.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--orange)"></span>app/models.py additions</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--orange)"></span>tests/test_mitigation.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--orange)"></span>main.py update</div>
+          </div>
+        </div>
+        <div>
+          <div class="ss-label" style="margin-bottom:1rem">Key Metrics</div>
+          <div class="ss-metrics">
+            <div class="ss-metric"><span class="ss-metric-label">API Endpoints</span><span class="ss-metric-val" style="color:var(--orange)">4</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">Hooks Registered</span><span class="ss-metric-val" style="color:var(--green)">6 hooks</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">Unit Tests</span><span class="ss-metric-val" style="color:var(--green)">27 passing</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">HTTP Client</span><span class="ss-metric-val" style="color:var(--text2)">HTTPX async</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SS4 -->
+      <div class="subsystem fade-up">
+        <div>
+          <div class="ss-label">Subsystem 4</div>
+          <div class="ss-num" style="color:var(--green)">SS4</div>
+          <div class="ss-name">Productization & Demo Layer</div>
+          <div class="ss-desc">The product layer. JWT auth with role-based access, Server-Sent Events streaming live disruption data every 3 seconds, Streamlit dashboard, GitHub Actions CI, and a full automotive demo seed script.</div>
+        </div>
+        <div>
+          <div class="ss-label" style="margin-bottom:1rem">8 New Files</div>
+          <div class="ss-files">
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--green)"></span>app/auth/jwt_handler.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--green)"></span>app/auth/dependencies.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--green)"></span>app/routes/auth.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--green)"></span>app/sse.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--green)"></span>dashboard/app.py</div>
+            <div class="ss-file"><span class="ss-file-dot" style="background:var(--green)"></span>scripts/seed_demo.py</div>
+          </div>
+        </div>
+        <div>
+          <div class="ss-label" style="margin-bottom:1rem">Key Metrics</div>
+          <div class="ss-metrics">
+            <div class="ss-metric"><span class="ss-metric-label">API Endpoints</span><span class="ss-metric-val" style="color:var(--green)">6</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">Auth Tests</span><span class="ss-metric-val" style="color:var(--green)">33 passing</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">SSE Interval</span><span class="ss-metric-val" style="color:var(--blue)">3 seconds</span></div>
+            <div class="ss-metric"><span class="ss-metric-label">CI</span><span class="ss-metric-val" style="color:var(--text2)">GitHub Actions</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT FORMULA -->
+<section class="section" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-tag">Scoring Engine</span>
+      <h2 class="section-title">The impact formula.</h2>
+      <p class="section-sub">Every factory in the graph is scored using a deterministic formula that captures severity, supply chain length, and factory vulnerability simultaneously.</p>
+    </div>
+    <div class="formula-box fade-up">
+      <div class="formula-title">Impact Score Formula</div>
+      <div class="formula">
+        <span class="result">impact_score</span> <span class="op">=</span>
+        <span class="var">severity_input</span> <span class="op">×</span>
+        <span class="var">max(transit_days, 1)</span> <span class="op">×</span>
+        <span class="var">max(1.0 − capacity_rate, 0.05)</span>
+      </div>
+      <div class="formula-vars">
+        <div class="formula-var">
+          <div class="fv-name">severity_input</div>
+          <div class="fv-desc">0.0 to 1.0 — how badly the disrupted node is affected. 1.0 = complete failure (TSMC offline). 0.75 = partial (Busan 75% congested).</div>
+        </div>
+        <div class="formula-var">
+          <div class="fv-name">transit_days</div>
+          <div class="fv-desc">Total days in the disrupted supply path. Hamburg to Chennai = 24 days. That's why BMW scores highest — longest path, most days at risk.</div>
+        </div>
+        <div class="formula-var">
+          <div class="fv-name">(1 − capacity_rate)</div>
+          <div class="fv-desc">Factory vulnerability. BMW at 70% capacity scores 0.30 vulnerability. Maruti at 92% scores 0.08. Lower capacity = higher exposure to disruption.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem">
+      <div class="section-tag">Risk Thresholds</div>
+      <table class="risk-table fade-up" style="margin-top:1rem">
+        <thead>
+          <tr>
+            <th>Risk Level</th>
+            <th>Impact Score Range</th>
+            <th>Real Example</th>
+            <th>Recommended Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="risk-badge" style="background:rgba(255,68,68,.15);color:#FF4444;border:1px solid rgba(255,68,68,.3)">● CRITICAL</span></td>
+            <td style="font-family:var(--mono);color:var(--red)">≥ 5.0</td>
+            <td style="color:var(--text2)">BMW India — 6.75 (Hamburg blocked)</td>
+            <td style="color:var(--text2)">Immediate automated mitigation</td>
+          </tr>
+          <tr>
+            <td><span class="risk-badge" style="background:rgba(255,107,53,.15);color:#FF6B35;border:1px solid rgba(255,107,53,.3)">● HIGH</span></td>
+            <td style="font-family:var(--mono);color:var(--orange)">≥ 2.0</td>
+            <td style="color:var(--text2)">Honda India — 4.60 (Renesas offline)</td>
+            <td style="color:var(--text2)">Urgent — trigger SS3 mitigation</td>
+          </tr>
+          <tr>
+            <td><span class="risk-badge" style="background:rgba(255,217,61,.15);color:#FFD93D;border:1px solid rgba(255,217,61,.3)">● MEDIUM</span></td>
+            <td style="font-family:var(--mono);color:var(--yellow)">≥ 0.5</td>
+            <td style="color:var(--text2)">Maruti Suzuki — 1.94 (multi-path)</td>
+            <td style="color:var(--text2)">Monitor — queue mitigation options</td>
+          </tr>
+          <tr>
+            <td><span class="risk-badge" style="background:rgba(0,220,130,.15);color:#00DC82;border:1px solid rgba(0,220,130,.3)">● LOW</span></td>
+            <td style="font-family:var(--mono);color:var(--green)">&lt; 0.5</td>
+            <td style="color:var(--text2)">Direct factory hit — no cascade</td>
+            <td style="color:var(--text2)">Log and watch</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- API ENDPOINTS -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-tag">API Reference</span>
+      <h2 class="section-title">23 endpoints.<br>Full REST surface.</h2>
+      <p class="section-sub">Every operation in LogiTwin is accessible via a documented REST API. JWT Bearer token authentication on all endpoints.</p>
+    </div>
+  </div>
+  <div style="max-width:1440px;margin:0 auto">
+    <div class="endpoints-grid fade-up">
+      <div class="endpoint"><span class="method-badge method-post">POST</span><div><div class="endpoint-path">/ingest/supplier</div><div class="endpoint-desc">Add a supplier node with tier, location, and ID. MERGE-based — safe to re-ingest.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/ingest/suppliers</div><div class="endpoint-desc">List all supplier nodes currently in the Neo4j graph.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-post">POST</span><div><div class="endpoint-path">/ingest/factory</div><div class="endpoint-desc">Add an assembly factory with capacity_rate and location.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/ingest/factories</div><div class="endpoint-desc">List all factory nodes with current capacity rates.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-post">POST</span><div><div class="endpoint-path">/ingest/port</div><div class="endpoint-desc">Add a port node with clearance days and operational status.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/ingest/ports</div><div class="endpoint-desc">List all port nodes with status and clearance times.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-post">POST</span><div><div class="endpoint-path">/ingest/relationship/supplies</div><div class="endpoint-desc">Create a SUPPLIES relationship between supplier and factory with lead_time_days.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-post">POST</span><div><div class="endpoint-path">/ingest/relationship/ships-through</div><div class="endpoint-desc">Create a maritime path: supplier → port → factory with transit days on each leg.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-post">POST</span><div><div class="endpoint-path">/simulation/run</div><div class="endpoint-desc">Fire a custom disruption simulation. Returns task_id immediately. Non-blocking.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/simulation/status/{task_id}</div><div class="endpoint-desc">Poll simulation result. Returns full impact report when status = SUCCESS.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-post">POST</span><div><div class="endpoint-path">/simulation/inject/{1,2,3}</div><div class="endpoint-desc">Inject predefined mock scenario. Instant demo trigger.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/simulation/events</div><div class="endpoint-desc">List all DISRUPTION_EVENT nodes ordered by timestamp descending.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/mitigation/options/{event_id}</div><div class="endpoint-desc">Get ranked reroute candidates for a disruption event. Combines hook registry + graph paths.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-post">POST</span><div><div class="endpoint-path">/mitigation/execute/{event_id}</div><div class="endpoint-desc">Fire selected mitigation hook. Supports dry_run mode for testing.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/mitigation/hooks</div><div class="endpoint-desc">List all registered carrier hooks and their action types, ETA deltas, costs.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/mitigation/events</div><div class="endpoint-desc">All events with mitigation status — pending, mitigated, or failed.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-post">POST</span><div><div class="endpoint-path">/auth/token</div><div class="endpoint-desc">Login with username + password. Returns JWT Bearer token valid 60 minutes.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/auth/me</div><div class="endpoint-desc">Returns current authenticated user info from token claims.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/auth/verify</div><div class="endpoint-desc">Lightweight token validity check. Returns 200 if valid, 401 if expired.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/stream/disruptions</div><div class="endpoint-desc">Server-Sent Events stream. Pushes live disruption data every 3 seconds.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/stream/health</div><div class="endpoint-desc">SSE health ping stream. Sends heartbeat every 5 seconds.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/health</div><div class="endpoint-desc">API and database health check. Returns status, version, db connection.</div></div></div>
+      <div class="endpoint"><span class="method-badge method-get">GET</span><div><div class="endpoint-path">/simulation/scenarios</div><div class="endpoint-desc">List all predefined mock disruption scenarios available for injection.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEO4J SCHEMA -->
+<section class="section" style="background:var(--bg2);border-top:1px solid var(--border)">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-tag">Graph Schema</span>
+      <h2 class="section-title">The graph that powers everything.</h2>
+      <p class="section-sub">Five node types. Five relationship types. Every supply chain event permanently recorded as a graph traversal.</p>
+    </div>
+    <div class="schema-visual fade-up">
+      <div class="schema-nodes">
+        <div class="schema-node" style="color:var(--purple3);border-color:rgba(124,58,237,.4);background:rgba(124,58,237,.08)">(:Supplier)</div>
+        <div class="schema-node" style="color:var(--green);border-color:rgba(0,220,130,.4);background:rgba(0,220,130,.08)">(:Factory)</div>
+        <div class="schema-node" style="color:var(--blue);border-color:rgba(0,212,255,.4);background:rgba(0,212,255,.08)">(:Port)</div>
+        <div class="schema-node" style="color:var(--red);border-color:rgba(255,68,68,.4);background:rgba(255,68,68,.08)">(:DISRUPTION_EVENT)</div>
+      </div>
+      <div class="schema-rels">
+        <div class="schema-rel">
+          <span class="rel-name" style="color:var(--purple3)">[:SUPPLIES]</span>
+          <span class="rel-arrow">→</span>
+          <span class="rel-props">component_id, lead_time_days · Supplier to Factory direct delivery</span>
+        </div>
+        <div class="schema-rel">
+          <span class="rel-name" style="color:var(--blue)">[:SHIPS_THROUGH]</span>
+          <span class="rel-arrow">→</span>
+          <span class="rel-props">transit_days · Supplier to Port leg of maritime route</span>
+        </div>
+        <div class="schema-rel">
+          <span class="rel-name" style="color:var(--blue)">[:DELIVERS_TO]</span>
+          <span class="rel-arrow">→</span>
+          <span class="rel-props">transit_days · Port to Factory delivery leg</span>
+        </div>
+        <div class="schema-rel">
+          <span class="rel-name" style="color:var(--red)">[:IMPACTS]</span>
+          <span class="rel-arrow">→</span>
+          <span class="rel-props">impact_score, risk_level, path_type · Written by simulation engine on every run</span>
+        </div>
+        <div class="schema-rel">
+          <span class="rel-name" style="color:var(--orange)">[:MITIGATION_ACTION]</span>
+          <span class="rel-arrow">→</span>
+          <span class="rel-props">action_id, carrier_name, success, duration_ms, executed_at · Full audit trail</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="nav-logo">
+      <div class="logo-mark" style="width:28px;height:28px">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="4" r="3" fill="white" opacity=".9"/>
+          <circle cx="3" cy="14" r="2.5" fill="white" opacity=".7"/>
+          <circle cx="17" cy="14" r="2.5" fill="white" opacity=".7"/>
+          <line x1="10" y1="7" x2="3" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/>
+          <line x1="10" y1="7" x2="17" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/>
+        </svg>
+      </div>
+      LogiTwin AI Engine
+    </div>
+    <div class="footer-nav">
+      <a href="platform.html">Platform</a>
+      <a href="results.html">Results</a>
+      <a href="technology.html">Technology</a>
+      <a href="industries.html">Industries</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 LogiTwin AI Engine. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

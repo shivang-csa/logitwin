@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technology — LogiTwin AI Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#000000;--bg2:#0D0D1A;--bg3:#12121F;--border:#1E1E35;--border2:#2A2A45;--text:#F0F0FF;--text2:#8888AA;--text3:#4A4A6A;--purple:#7C3AED;--purple2:#9D5CFF;--purple3:#BFA0FF;--green:#00DC82;--red:#FF4444;--orange:#FF6B35;--yellow:#FFD93D;--blue:#00D4FF;--font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace}
+html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--black);color:var(--text);line-height:1.6;overflow-x:hidden}a{text-decoration:none;color:inherit}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--black)}::-webkit-scrollbar-thumb{background:var(--purple);border-radius:2px}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(0,0,0,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 40px;max-width:1440px;margin:0 auto}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#4F1BBE);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(124,58,237,.5)}
+.nav-links{display:flex;align-items:center;gap:8px}
+.nav-links a{font-size:.82rem;font-weight:500;color:var(--text2);padding:.4rem .9rem;border-radius:8px;transition:all .2s}
+.nav-links a:hover{color:var(--text);background:var(--bg3)}.nav-links a.active{color:var(--purple3);background:rgba(124,58,237,.1)}
+.nav-cta{background:var(--purple);color:white;padding:.5rem 1.25rem;border-radius:8px;font-size:.82rem;font-weight:600;transition:all .2s;border:1px solid rgba(157,92,255,.3)}
+.nav-cta:hover{background:var(--purple2);transform:translateY(-1px)}
+.page-header{padding:120px 40px 60px;max-width:1440px;margin:0 auto;border-bottom:1px solid var(--border)}
+.breadcrumb{font-size:.75rem;color:var(--text3);margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem}
+.breadcrumb a{color:var(--text3);transition:color .2s}.breadcrumb a:hover{color:var(--purple3)}.breadcrumb span{color:var(--border2)}
+.page-title{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:900;letter-spacing:-.04em;line-height:1.05;margin-bottom:1.25rem}
+.page-title .accent{background:linear-gradient(135deg,#00D4FF,#00DC82);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-sub{font-size:1.1rem;color:var(--text2);max-width:640px;line-height:1.8}
+.section{padding:6rem 0}.section-inner{max-width:1440px;margin:0 auto;padding:0 40px}
+.section-tag{display:inline-block;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:var(--purple3);margin-bottom:.75rem}
+.section-title{font-size:clamp(1.8rem,3.5vw,3rem);font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:1rem}
+.section-sub{font-size:1rem;color:var(--text2);max-width:560px;line-height:1.8}.section-header{margin-bottom:3.5rem}
+
+/* TECH STACK DETAILED */
+.tech-detailed{display:flex;flex-direction:column;gap:2px;background:var(--border)}
+.tech-row{background:var(--bg2);padding:2.5rem 40px;display:grid;grid-template-columns:200px 1fr 1fr;gap:4rem;align-items:start;transition:background .3s}
+.tech-row:hover{background:var(--bg3)}
+.tech-icon-lg{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;border:1px solid var(--border2)}
+.tech-name-lg{font-size:1.2rem;font-weight:800;margin-bottom:.2rem;letter-spacing:-.02em}
+.tech-version{font-size:.72rem;font-family:var(--mono);color:var(--text3)}
+.tech-role-lg{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple3);margin-bottom:.75rem}
+.tech-desc-lg{font-size:.875rem;color:var(--text2);line-height:1.7}
+.tech-why{display:flex;flex-direction:column;gap:.6rem}
+.why-item{display:flex;align-items:flex-start;gap:.6rem;font-size:.82rem;color:var(--text2)}
+.why-check{color:var(--green);flex-shrink:0;margin-top:.15rem}
+.tech-stats-col{display:flex;flex-direction:column;gap:.6rem}
+.tech-stat-item{display:flex;justify-content:space-between;align-items:center;padding:.6rem .9rem;background:var(--bg3);border-radius:8px;border:1px solid var(--border)}
+.tsi-label{font-size:.75rem;color:var(--text2)}.tsi-val{font-size:.8rem;font-weight:700;font-family:var(--mono)}
+
+/* ARCHITECTURE DIAGRAM */
+.arch-diagram{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3rem;position:relative;overflow:hidden}
+.arch-layer{display:flex;gap:1rem;margin-bottom:1rem;align-items:center}
+.arch-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);width:100px;flex-shrink:0;text-align:right}
+.arch-boxes{display:flex;gap:.75rem;flex:1;flex-wrap:wrap}
+.arch-box{padding:.6rem 1rem;border-radius:8px;font-size:.78rem;font-weight:600;border:1px solid;white-space:nowrap}
+.arch-arrow{text-align:center;color:var(--text3);font-size:1.2rem;margin-bottom:1rem;padding-left:108px}
+
+/* PRINCIPLES */
+.principles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.principle{background:var(--bg2);padding:2.5rem;transition:background .3s}
+.principle:hover{background:var(--bg3)}
+.p-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;border:1px solid var(--border2)}
+.p-title{font-size:1rem;font-weight:700;margin-bottom:.6rem;letter-spacing:-.01em}
+.p-desc{font-size:.85rem;color:var(--text2);line-height:1.7}
+
+footer{padding:2.5rem 0;border-top:1px solid var(--border);background:var(--black)}
+.footer-inner{max-width:1440px;margin:0 auto;padding:0 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-nav{display:flex;gap:2rem}.footer-nav a{font-size:.8rem;color:var(--text3);transition:color .2s}.footer-nav a:hover{color:var(--text2)}
+.footer-copy{font-size:.78rem;color:var(--text3)}
+.fade-up{opacity:0;transform:translateY(20px);transition:all .7s ease}.fade-up.visible{opacity:1;transform:translateY(0)}
+@media(max-width:1024px){.tech-row{grid-template-columns:1fr 1fr;gap:2rem}.principles-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.nav-inner,.page-header,.section-inner,.footer-inner{padding-left:20px;padding-right:20px}.nav-links{display:none}.tech-row{grid-template-columns:1fr;padding:2rem 20px}.principles-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="4" r="3" fill="white" opacity=".9"/><circle cx="3" cy="14" r="2.5" fill="white" opacity=".7"/><circle cx="17" cy="14" r="2.5" fill="white" opacity=".7"/><line x1="10" y1="7" x2="3" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/><line x1="10" y1="7" x2="17" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/></svg></div>LogiTwin
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a><a href="platform.html">Platform</a><a href="results.html">Proof of Work</a>
+      <a href="technology.html" class="active">Technology</a><a href="industries.html">Industries</a><a href="contact.html">Contact</a>
+    </div>
+    <a href="contact.html" class="nav-cta">Request Demo</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span style="color:var(--text2)">Technology</span></div>
+  <h1 class="page-title">Enterprise stack.<br><span class="accent">Zero cost.</span></h1>
+  <p class="page-sub">LogiTwin is built on battle-tested open-source tools — no proprietary licenses, no vendor lock-in. Every technology choice is deliberate, documented, and replaceable.</p>
+</div>
+
+<!-- ARCHITECTURE -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-tag">Architecture</span>
+      <h2 class="section-title">How the layers connect.</h2>
+    </div>
+    <div class="arch-diagram fade-up">
+      <div class="arch-layer">
+        <div class="arch-label">Client</div>
+        <div class="arch-boxes">
+          <div class="arch-box" style="color:var(--purple3);border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.08)">Streamlit Dashboard</div>
+          <div class="arch-box" style="color:var(--blue);border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.08)">REST API Clients</div>
+          <div class="arch-box" style="color:var(--green);border-color:rgba(0,220,130,.3);background:rgba(0,220,130,.08)">SSE Stream Consumers</div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕</div>
+      <div class="arch-layer">
+        <div class="arch-label">API Layer</div>
+        <div class="arch-boxes">
+          <div class="arch-box" style="color:var(--purple3);border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.08)">FastAPI + Uvicorn (async)</div>
+          <div class="arch-box" style="color:var(--purple3);border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.08)">JWT Auth (python-jose)</div>
+          <div class="arch-box" style="color:var(--purple3);border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.08)">Pydantic v2 validation</div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕</div>
+      <div class="arch-layer">
+        <div class="arch-label">Workers</div>
+        <div class="arch-boxes">
+          <div class="arch-box" style="color:var(--orange);border-color:rgba(255,107,53,.3);background:rgba(255,107,53,.08)">Celery (4 workers)</div>
+          <div class="arch-box" style="color:var(--red);border-color:rgba(255,68,68,.3);background:rgba(255,68,68,.08)">Redis (broker + backend)</div>
+          <div class="arch-box" style="color:var(--blue);border-color:rgba(0,212,255,.3);background:rgba(0,212,255,.08)">HTTPX (carrier hooks)</div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕</div>
+      <div class="arch-layer">
+        <div class="arch-label">Database</div>
+        <div class="arch-boxes">
+          <div class="arch-box" style="color:var(--green);border-color:rgba(0,220,130,.3);background:rgba(0,220,130,.08)">Neo4j 5.20 (graph DB)</div>
+          <div class="arch-box" style="color:var(--green);border-color:rgba(0,220,130,.3);background:rgba(0,220,130,.08)">Cypher query language</div>
+          <div class="arch-box" style="color:var(--green);border-color:rgba(0,220,130,.3);background:rgba(0,220,130,.08)">Async driver (neo4j-python)</div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕</div>
+      <div class="arch-layer">
+        <div class="arch-label">Infra</div>
+        <div class="arch-boxes">
+          <div class="arch-box" style="color:var(--text2);border-color:var(--border2);background:var(--bg3)">Docker containers</div>
+          <div class="arch-box" style="color:var(--text2);border-color:var(--border2);background:var(--bg3)">WSL 2 (Ubuntu 22.04)</div>
+          <div class="arch-box" style="color:var(--text2);border-color:var(--border2);background:var(--bg3)">GitHub Actions CI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK DETAILED -->
+<section class="section" style="padding-top:0">
+  <div style="max-width:1440px;margin:0 auto">
+    <div style="padding:0 40px;margin-bottom:2rem">
+      <span class="section-tag">Stack Deep Dive</span>
+      <h2 class="section-title">Every tool. Every reason.</h2>
+    </div>
+    <div class="tech-detailed">
+
+      <div class="tech-row fade-up">
+        <div>
+          <div class="tech-icon-lg" style="background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.3)">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 4L4 10V16C4 22.6 9.4 28 16 28C22.6 28 28 22.6 28 16V10L16 4Z" stroke="#7C3AED" stroke-width="2" stroke-linejoin="round"/><path d="M11 16L14.5 19.5L21 13" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="tech-name-lg">FastAPI</div>
+          <div class="tech-version">v0.115.5 · Python 3.11</div>
+        </div>
+        <div>
+          <div class="tech-role-lg">Async REST API Framework</div>
+          <div class="tech-desc-lg">FastAPI provides the async-first REST API layer for LogiTwin. All 23 endpoints are fully async — meaning hundreds of concurrent simulation requests never block each other. Auto-generated OpenAPI docs at /docs. Pydantic v2 integration means every request and response is validated at the Python level before touching the database.</div>
+          <div class="tech-why" style="margin-top:1rem">
+            <div class="why-item"><span class="why-check">✓</span>Native async/await — no blocking I/O anywhere in the request chain</div>
+            <div class="why-item"><span class="why-check">✓</span>Pydantic v2 strict mode catches malformed payloads before Neo4j sees them</div>
+            <div class="why-item"><span class="why-check">✓</span>Auto OpenAPI schema generation — client integrations start from the /docs page</div>
+          </div>
+        </div>
+        <div class="tech-stats-col">
+          <div class="tech-stat-item"><span class="tsi-label">Endpoints</span><span class="tsi-val" style="color:var(--purple3)">23</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Pattern</span><span class="tsi-val" style="color:var(--text2)">async/await</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Auth</span><span class="tsi-val" style="color:var(--green)">JWT Bearer</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Docs</span><span class="tsi-val" style="color:var(--blue)">/docs (OpenAPI)</span></div>
+        </div>
+      </div>
+
+      <div class="tech-row fade-up">
+        <div>
+          <div class="tech-icon-lg" style="background:rgba(0,220,130,.1);border-color:rgba(0,220,130,.3)">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="8" cy="8" r="4" stroke="#00DC82" stroke-width="2"/><circle cx="24" cy="8" r="4" stroke="#00DC82" stroke-width="2"/><circle cx="16" cy="24" r="4" stroke="#00DC82" stroke-width="2"/><path d="M12 8H20M10 11L14 21M22 11L18 21" stroke="#00DC82" stroke-width="1.8"/></svg>
+          </div>
+          <div class="tech-name-lg">Neo4j</div>
+          <div class="tech-version">v5.20.0 · Docker</div>
+        </div>
+        <div>
+          <div class="tech-role-lg">Graph Database — The Core</div>
+          <div class="tech-desc-lg">Supply chains are graphs. A supplier ships to a factory through a port — that's a 3-node, 2-relationship traversal. In a relational database that's a JOIN across 3 tables with foreign keys. In Neo4j it's a single Cypher MATCH that runs in milliseconds regardless of how many nodes exist. When Hamburg port goes offline, finding every affected factory is one BFS query — not a 5-table JOIN.</div>
+          <div class="tech-why" style="margin-top:1rem">
+            <div class="why-item"><span class="why-check">✓</span>BFS traversal in milliseconds — SQL would need recursive CTEs and multiple JOINs</div>
+            <div class="why-item"><span class="why-check">✓</span>Native relationship properties — lead_time_days, transit_days stored on edges</div>
+            <div class="why-item"><span class="why-check">✓</span>MERGE pattern — re-ingesting never creates duplicate nodes</div>
+          </div>
+        </div>
+        <div class="tech-stats-col">
+          <div class="tech-stat-item"><span class="tsi-label">Nodes</span><span class="tsi-val" style="color:var(--green)">50+</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Relationships</span><span class="tsi-val" style="color:var(--green)">55+</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Driver</span><span class="tsi-val" style="color:var(--text2)">neo4j async</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Query lang</span><span class="tsi-val" style="color:var(--blue)">Cypher</span></div>
+        </div>
+      </div>
+
+      <div class="tech-row fade-up">
+        <div>
+          <div class="tech-icon-lg" style="background:rgba(0,212,255,.1);border-color:rgba(0,212,255,.3)">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="4" width="24" height="24" rx="4" stroke="#00D4FF" stroke-width="2"/><path d="M4 12H28" stroke="#00D4FF" stroke-width="1.5"/><path d="M4 20H28" stroke="#00D4FF" stroke-width="1.5"/><path d="M12 4V28" stroke="#00D4FF" stroke-width="1.5"/></svg>
+          </div>
+          <div class="tech-name-lg">Celery + Redis</div>
+          <div class="tech-version">Celery 5.4 · Redis 7</div>
+        </div>
+        <div>
+          <div class="tech-role-lg">Async Task Queue</div>
+          <div class="tech-desc-lg">Simulations can't run synchronously — a single simulation traverses 55+ graph relationships and writes back to Neo4j. Running that on the FastAPI request thread would block all other API calls. Celery workers run as completely separate OS processes, each creating their own Neo4j driver. Redis is both the message broker (task queue) and result backend (where results are stored for polling).</div>
+          <div class="tech-why" style="margin-top:1rem">
+            <div class="why-item"><span class="why-check">✓</span>Workers are separate processes — FastAPI never waits for a simulation to complete</div>
+            <div class="why-item"><span class="why-check">✓</span>4 concurrent workers — 4 simulations can run in parallel</div>
+            <div class="why-item"><span class="why-check">✓</span>task_acks_late=True — task marked complete only after successful Neo4j write</div>
+          </div>
+        </div>
+        <div class="tech-stats-col">
+          <div class="tech-stat-item"><span class="tsi-label">Concurrency</span><span class="tsi-val" style="color:var(--blue)">4 workers</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Broker</span><span class="tsi-val" style="color:var(--text2)">redis://6379</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Retries</span><span class="tsi-val" style="color:var(--green)">3 max</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Backoff</span><span class="tsi-val" style="color:var(--text2)">5s exponential</span></div>
+        </div>
+      </div>
+
+      <div class="tech-row fade-up">
+        <div>
+          <div class="tech-icon-lg" style="background:rgba(255,107,53,.1);border-color:rgba(255,107,53,.3)">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 4L4 10V22L16 28L28 22V10L16 4Z" stroke="#FF6B35" stroke-width="2" stroke-linejoin="round"/><path d="M4 10L16 16L28 10" stroke="#FF6B35" stroke-width="1.8"/><path d="M16 16V28" stroke="#FF6B35" stroke-width="1.8"/></svg>
+          </div>
+          <div class="tech-name-lg">Pydantic v2</div>
+          <div class="tech-version">v2.10 · Strict mode</div>
+        </div>
+        <div>
+          <div class="tech-role-lg">Data Validation Layer</div>
+          <div class="tech-desc-lg">Every piece of data entering LogiTwin goes through Pydantic v2 strict validation before touching Neo4j. A supplier without an ID, a factory with capacity_rate &gt; 1.0, a relationship with negative lead_time_days — all rejected at the API boundary with clear error messages. Pydantic v2 is 5-50x faster than v1 and uses Rust under the hood for core validation.</div>
+          <div class="tech-why" style="margin-top:1rem">
+            <div class="why-item"><span class="why-check">✓</span>Strict mode — no silent coercion, wrong types always raise ValidationError</div>
+            <div class="why-item"><span class="why-check">✓</span>model_config="str_strip_whitespace" — client whitespace bugs never hit the DB</div>
+            <div class="why-item"><span class="why-check">✓</span>BaseSettings for config — all secrets loaded from .env, never hardcoded</div>
+          </div>
+        </div>
+        <div class="tech-stats-col">
+          <div class="tech-stat-item"><span class="tsi-label">Models</span><span class="tsi-val" style="color:var(--orange)">14+</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Mode</span><span class="tsi-val" style="color:var(--text2)">Strict</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Config</span><span class="tsi-val" style="color:var(--green)">BaseSettings</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Speed</span><span class="tsi-val" style="color:var(--blue)">5-50x v1</span></div>
+        </div>
+      </div>
+
+      <div class="tech-row fade-up">
+        <div>
+          <div class="tech-icon-lg" style="background:rgba(255,217,61,.1);border-color:rgba(255,217,61,.3)">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 6H26V26H6V6Z" stroke="#FFD93D" stroke-width="2" stroke-linejoin="round"/><path d="M6 14H26" stroke="#FFD93D" stroke-width="1.5"/><path d="M14 6V26" stroke="#FFD93D" stroke-width="1.5"/><path d="M18 18H22M18 22H20" stroke="#FFD93D" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="tech-name-lg">HTTPX</div>
+          <div class="tech-version">v0.28.1 · Async</div>
+        </div>
+        <div>
+          <div class="tech-role-lg">Carrier API Hook Client</div>
+          <div class="tech-desc-lg">When LogiTwin fires a mitigation hook, it uses HTTPX — the async HTTP client built for Python's asyncio. When multiple hooks fire in parallel (Maersk + DHL + FedEx simultaneously), asyncio.gather runs them all concurrently. One slow or failed carrier API never blocks others. 10-second timeout, 3 retries with exponential backoff, return_exceptions=True isolation.</div>
+          <div class="tech-why" style="margin-top:1rem">
+            <div class="why-item"><span class="why-check">✓</span>Fully async — fires 6 carrier hooks in parallel without blocking</div>
+            <div class="why-item"><span class="why-check">✓</span>Full exception isolation — one timeout never cancels other hooks</div>
+            <div class="why-item"><span class="why-check">✓</span>Custom headers — X-LogiTwin-Hook, X-Action-Type sent to carrier APIs</div>
+          </div>
+        </div>
+        <div class="tech-stats-col">
+          <div class="tech-stat-item"><span class="tsi-label">Timeout</span><span class="tsi-val" style="color:var(--yellow)">10s</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Retries</span><span class="tsi-val" style="color:var(--green)">3 max</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Hooks</span><span class="tsi-val" style="color:var(--text2)">6 registered</span></div>
+          <div class="tech-stat-item"><span class="tsi-label">Pattern</span><span class="tsi-val" style="color:var(--blue)">gather + isolation</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPLES -->
+<section class="section" style="background:var(--bg2);border-top:1px solid var(--border);padding:0">
+  <div class="section-inner" style="padding-top:4rem;padding-bottom:1rem;margin-bottom:2rem">
+    <span class="section-tag">Engineering Principles</span>
+    <h2 class="section-title">Three rules. Never broken.</h2>
+  </div>
+  <div class="principles-grid">
+    <div class="principle fade-up">
+      <div class="p-icon" style="background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.3)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="#BFA0FF" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="p-title">Async-First</div>
+      <div class="p-desc">Every network call, every database transaction, every simulation — fully async/await. The FastAPI request thread never blocks waiting for Neo4j or Celery. Uvicorn handles concurrent requests on a single event loop. Workers use asyncio.run() to bridge sync Celery tasks into async Neo4j operations.</div>
+    </div>
+    <div class="principle fade-up">
+      <div class="p-icon" style="background:rgba(0,220,130,.1);border-color:rgba(0,220,130,.3)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#00DC82" stroke-width="1.8"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#00DC82" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div class="p-title">Exception Isolation</div>
+      <div class="p-desc">Every downstream connector is wrapped in structured exception handling. HTTPX carrier hooks use asyncio.gather(return_exceptions=True) — one failed Maersk connection never cancels the DHL hook. Neo4j errors in Celery workers are caught, logged, and returned as structured error dicts — never stack traces to the client.</div>
+    </div>
+    <div class="principle fade-up">
+      <div class="p-icon" style="background:rgba(0,212,255,.1);border-color:rgba(0,212,255,.3)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" stroke="#00D4FF" stroke-width="1.8"/><path d="M2 12H22M12 2C9.33333 5 8 8.33333 8 12C8 15.6667 9.33333 19 12 22M12 2C14.6667 5 16 8.33333 16 12C16 15.6667 14.6667 19 12 22" stroke="#00D4FF" stroke-width="1.5"/></svg>
+      </div>
+      <div class="p-title">Decoupled Config</div>
+      <div class="p-desc">Zero secrets in code. Every URI, key, password, and parameter lives in .env files loaded by Pydantic BaseSettings. NEO4J_URI, REDIS_URL, JWT_SECRET_KEY, JWT_EXPIRE_MINUTES — all configurable without touching source code. Rotating credentials in production is a one-line .env change and a process restart.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="nav-logo">
+      <div class="logo-mark" style="width:28px;height:28px"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="4" r="3" fill="white" opacity=".9"/><circle cx="3" cy="14" r="2.5" fill="white" opacity=".7"/><circle cx="17" cy="14" r="2.5" fill="white" opacity=".7"/><line x1="10" y1="7" x2="3" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/><line x1="10" y1="7" x2="17" y2="12" stroke="white" stroke-width="1.2" opacity=".5"/></svg></div>LogiTwin AI Engine
+    </div>
+    <div class="footer-nav"><a href="platform.html">Platform</a><a href="results.html">Results</a><a href="technology.html">Technology</a><a href="industries.html">Industries</a><a href="contact.html">Contact</a></div>
+    <div class="footer-copy">© 2026 LogiTwin AI Engine. All rights reserved.</div>
+  </div>
+</footer>
+<script>const o=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1});document.querySelectorAll('.fade-up').forEach(el=>o.observe(el))</script>
+</body>
+</html>
